@@ -1,54 +1,59 @@
 package com.dbolshak.testtask.rest.controller;
 
-import com.dbolshak.testtask.rest.exceptions.InvalidConfigurationException;
-import org.springframework.boot.CommandLineRunner;
+import com.dbolshak.testtask.model.dto.ExistingTopicsDto;
+import com.dbolshak.testtask.model.dto.LastRunningDetailsDto;
+import com.dbolshak.testtask.model.dto.LastRunningDto;
+import com.dbolshak.testtask.model.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.service.TopicService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by dbolshak on 03.09.2014.
  */
 @Controller
-public class TopicController implements CommandLineRunner {
-    DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
-        @Override
-        public boolean accept(Path file) throws IOException {
-            return (Files.isDirectory(file));
-        }
-    };
-    private Path baseDir;
+public class TopicController {
+    @Autowired
+    TopicService topicService;
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/topics", method = RequestMethod.GET)
     @ResponseBody
-    String home() {
-        String result = "";
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(baseDir, filter)) {
-            for (Path path : stream) {
-                result += path.getFileName();
-                result += (System.getProperty("line.separator"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+    public ResponseEntity<ExistingTopicsDto> getExistingTopics() {
+        return new ResponseEntity(topicService.getAllExistingTopics(), HttpStatus.OK);
     }
 
-    @Override
-    public void run(String... strings) throws Exception {
-        if (strings.length != 1) {
-            throw new InvalidConfigurationException("You must specify at least one (and exactly one) parameter which points to base_dir");
+    @RequestMapping(value = "/lastRunning/{topic}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<LastRunningDto> getLastRunningByTopic(@PathVariable String topic) {
+        if (!topicService.topicExists(topic)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        Path path = Paths.get(strings[0]);
-        if (!Files.exists(path) || !Files.isDirectory(path)) {
-            throw new InvalidConfigurationException("base_dir does not exist or it's not a directory.");
+        return new ResponseEntity(topicService.findLastRunningFor(topic), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/statisticsForLastRunning/{topic}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) {
+        if (!topicService.topicExists(topic)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        baseDir = path;
+
+        return new ResponseEntity(topicService.getStaticsForLastRunningByTopic(topic), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/detailsForLastRunning/{topic}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) {
+        if (!topicService.topicExists(topic)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity(topicService.getLastRunningDetailsByTopic(topic), HttpStatus.OK);
     }
 }
