@@ -12,7 +12,7 @@ String timeStampFormat = "yyyy-MM-DD-HH-mm-ss"
 
 (1..topicCount).each { topicId ->
     Thread.start {
-        File historyFolder = new File("${baseDir}${separator}topic-${topicId}${separator}history")
+        String historyFolder = new File("${baseDir}${separator}topic-${topicId}${separator}history").getAbsolutePath()
 
         (1..runningCount).each { timeStampDelta ->
             DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL)
@@ -21,7 +21,7 @@ String timeStampFormat = "yyyy-MM-DD-HH-mm-ss"
             SimpleDateFormat df1 = new SimpleDateFormat(timeStampFormat)
             df1.applyPattern(timeStampFormat)
 
-            File folderForCsvFile = new File("${historyFolder.getAbsolutePath()}${separator}${df1.format(df.parse(df.format(new Date((1220227200L + timeStampDelta) * 1000L))))}")
+            File folderForCsvFile = new File("${historyFolder}${separator}${df1.format(df.parse(df.format(new Date((1220227200L + timeStampDelta) * 1000L))))}")
             if( !folderForCsvFile.exists() ) {
               folderForCsvFile.mkdirs()
             }
