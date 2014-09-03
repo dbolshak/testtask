@@ -32,6 +32,7 @@ public class TopicController implements CommandLineRunner {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(baseDir, filter)) {
             for (Path path : stream) {
                 result += path.getFileName();
+                result += (System.getProperty("line.separator"));
             }
         } catch (IOException e) {
             e.printStackTrace();
