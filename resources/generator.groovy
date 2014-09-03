@@ -1,31 +1,31 @@
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat
+import java.text.DateFormat
 
-int topicCount = 10
-int runningCount = 10
+int topicCount      = 10
+int runningCount    = 10
 int maxRecordsInCsv = 100
+
+String currentDir      = new File(".").getAbsolutePath()
+String separator       = System.getProperty("file.separator")
+String baseDir         = "${currentDir}${separator}base_dir"
+String timeStampFormat = "yyyy-MM-DD-HH-mm-ss"
 
 (1..topicCount).each { topicId ->
     Thread.start {
-        File file = new File("D:\\projects\\testtask\\resources\\base_dir\\topic-${topicId}\\history")
-        file.mkdirs()
-        String path =file.getAbsolutePath()
+        File historyFolder = new File("${baseDir}${separator}topic-${topicId}${separator}history")
 
         (1..runningCount).each { timeStampDelta ->
-            Date date = new Date((1220227200L + timeStampDelta) * 1000L)
             DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL)
             df.setTimeZone(TimeZone.getTimeZone("UTC"))
-            String date1 = df.format(date)
-            Date date2 = df.parse(date1)
         
-            SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-DD-HH-mm-ss");
-            df1.applyPattern("yyyy-MM-dd-hh-mm-ss");
+            SimpleDateFormat df1 = new SimpleDateFormat(timeStampFormat)
+            df1.applyPattern(timeStampFormat)
 
-            File folder = new File("${path}\\${df1.format(date2)}")
-            if( !folder.exists() ) {
-              folder.mkdirs()
+            File folderForCsvFile = new File("${historyFolder.getAbsolutePath()}${separator}${df1.format(df.parse(df.format(new Date((1220227200L + timeStampDelta) * 1000L))))}")
+            if( !folderForCsvFile.exists() ) {
+              folderForCsvFile.mkdirs()
             }
-            File csvFile = new File ("${path}\\${df1.format(date2)}\\offsets.csv")
+            File csvFile = new File ("${folderForCsvFile.getAbsolutePath()}${separator}offsets.csv")
             StringBuilder sb = new StringBuilder()
             (1..maxRecordsInCsv).each { partitionNumber ->
                 sb.append(partitionNumber).append(",").append(Math.abs(new Random().nextInt() % 600 + 1)).append(System.getProperty("line.separator"))
