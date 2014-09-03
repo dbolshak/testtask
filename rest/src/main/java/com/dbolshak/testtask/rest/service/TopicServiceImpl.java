@@ -31,16 +31,13 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
 
     @Override
     public LastRunningDto findLastRunningFor(String topic) {
-        LastRunningDto lastRunningDto = new LastRunningDto();
-        lastRunningDto.setLastRunning("1-1-1-1");
-        lastRunningDto.setTopic(topic);
+        LastRunningDto lastRunningDto = new LastRunningDto(topic);
         return lastRunningDto;
     }
 
     @Override
     public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) {
-        StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto();
-        statisticsForLastRunningDto.setTopic(topic);
+        StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
         statisticsForLastRunningDto.setTotal(20);
         statisticsForLastRunningDto.setMin(1);
         statisticsForLastRunningDto.setMax(10);
@@ -50,12 +47,11 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
 
     @Override
     public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) {
-        LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto();
+        LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
         Map<Integer, Integer> map = new HashMap<>();
         map.put(1, 2);
         map.put(3, 4);
         detailsForLastRunning.setMessagesForPartition(map);
-        detailsForLastRunning.setTopic(topic);
         return detailsForLastRunning;
     }
 

@@ -11,12 +11,12 @@ public class StatisticsForLastRunningDto {
     private int max;
     private int average;
 
-    public String getTopic() {
-        return topic;
+    public StatisticsForLastRunningDto(String topic) {
+        this.topic = topic;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public String getTopic() {
+        return topic;
     }
 
     public int getTotal() {

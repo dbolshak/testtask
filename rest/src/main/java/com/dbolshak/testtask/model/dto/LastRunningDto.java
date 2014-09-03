@@ -7,6 +7,10 @@ public class LastRunningDto {
     private String topic;
     private String lastRunning;
 
+    public LastRunningDto(String topic) {
+        this.topic = topic;
+    }
+
     public String getLastRunning() {
         return lastRunning;
     }
@@ -17,9 +21,5 @@ public class LastRunningDto {
 
     public String getTopic() {
         return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 }

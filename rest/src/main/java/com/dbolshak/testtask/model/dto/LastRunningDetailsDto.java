@@ -9,6 +9,10 @@ public class LastRunningDetailsDto {
     private String topic;
     private Map<Integer, Integer> messagesForPartition;
 
+    public LastRunningDetailsDto(String topic) {
+        this.topic = topic;
+    }
+
     public Map<Integer, Integer> getMessagesForPartition() {
         return messagesForPartition;
     }
@@ -19,9 +23,5 @@ public class LastRunningDetailsDto {
 
     public String getTopic() {
         return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 }
