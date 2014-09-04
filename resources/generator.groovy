@@ -21,7 +21,7 @@ String timeStampFormat = "yyyy-MM-DD-HH-mm-ss"
             SimpleDateFormat df1 = new SimpleDateFormat(timeStampFormat)
             df1.applyPattern(timeStampFormat)
 
-            File folderForCsvFile = new File("${historyFolder}${separator}${df1.format(df.parse(df.format(new Date((1220227200L + timeStampDelta) * 1000L))))}")
+            File folderForCsvFile = new File("${historyFolder}${separator}${df1.format(df.parse(df.format(new Date(946684800000 + timeStampDelta * 1000L))))}")
             if( !folderForCsvFile.exists() ) {
               folderForCsvFile.mkdirs()
             }
