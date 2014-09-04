@@ -12,9 +12,4 @@ public class JavaConfiguration {
     public static void main(String[] args) {
         SpringApplication.run(JavaConfiguration.class, args);
     }
-
-    //@Bean
-    //public TopicService asTopicService() {
-    //return new TopicServiceImpl();
-    //}
 }
