@@ -1,10 +1,12 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.model.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDto;
-import com.dbolshak.testtask.model.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.fs.Indexer;
+import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDto;
+import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 import com.dbolshak.testtask.rest.exceptions.InvalidConfigurationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.Map;
 @Service("topicService")
 public class TopicServiceImpl implements TopicService, CommandLineRunner {
     private Path baseDir; //it will be inited during startup.
+    @Autowired
+    private Indexer indexer;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();
@@ -70,6 +74,6 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
         if (!Files.exists(path) || !Files.isDirectory(path)) {
             throw new InvalidConfigurationException("base_dir does not exist or it's not a directory.");
         }
-        baseDir = path;
+        indexer.setBaseDir(path.toAbsolutePath().toString());
     }
 }

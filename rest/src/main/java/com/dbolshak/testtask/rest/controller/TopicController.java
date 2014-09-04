@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.rest.controller;
 
-import com.dbolshak.testtask.model.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDto;
-import com.dbolshak.testtask.model.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDto;
+import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 import com.dbolshak.testtask.rest.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

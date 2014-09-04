@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.model.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.model.dto.LastRunningDto;
-import com.dbolshak.testtask.model.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunningDto;
+import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 
 /**
  * Created by dbolshak on 03.09.2014.
