@@ -1,8 +1,8 @@
 import java.text.SimpleDateFormat
 import java.text.DateFormat
 
-int topicCount      = 10
-int runningCount    = 10
+int topicCount      = 100
+int runningCount    = 10000
 int maxRecordsInCsv = 100
 
 String currentDir      = new File(".").getAbsolutePath()
