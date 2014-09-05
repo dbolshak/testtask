@@ -3,6 +3,7 @@ package com.dbolshak.testtask.dao.cache;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampInfo;
 import com.dbolshak.testtask.utils.Helper;
+import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.*;
 
 @Component("cacheSerivce")
 public class CacheServiceImpl implements Computable, CacheService {
-    private final ConcurrentMap<String, Future<TimeStampInfo>> cache = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Future<TimeStampInfo>> cache = new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1000000).build();
     @Autowired
     private Computable fileReader;
     private String baseDir;
