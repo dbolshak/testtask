@@ -34,4 +34,5 @@ public interface TopicChangingListener {
      */
     void register();
 
+    void setBaseDir(String baseDir);
 }

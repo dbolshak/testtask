@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * Created by dbolshak on 04.09.2014.
  */
-final public class Constants {
+final public class Helper {
     public static final String DATE_FORMAT = "YYYY-MM-DD-HH-mm-ss";
     public static final String HISTORY_SUBFOLDER = "history";
 
@@ -15,7 +15,12 @@ final public class Constants {
     public static final String OFFSETS_FILE_NAME = "offsets.csv";
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static final String PATH_SPLITTER = Pattern.quote(FILE_SEPARATOR);
+    public static final String FULL_PATH_FORMATTER = "%s" + FILE_SEPARATOR + "%s" + FILE_SEPARATOR + HISTORY_SUBFOLDER + FILE_SEPARATOR + "%s" + FILE_SEPARATOR + OFFSETS_FILE_NAME;
 
-    private Constants() {
+    private Helper() {
+    }
+
+    public static String getFileName(String baseDir, String topic, String timeStamp) {
+        return String.format(FULL_PATH_FORMATTER, baseDir, topic, timeStamp);
     }
 }

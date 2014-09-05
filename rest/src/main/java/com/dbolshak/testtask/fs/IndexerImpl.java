@@ -1,8 +1,11 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.utils.Constants;
+import com.dbolshak.testtask.dao.TopicChangingNotifier;
+import com.dbolshak.testtask.dao.cache.CacheService;
+import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.*;
 import org.apache.commons.vfs2.impl.DefaultFileMonitor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,8 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by dbolshak on 04.09.2014.
@@ -21,6 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class IndexerImpl implements Indexer{
     private Map<String, TreeMap<String, String>> runningsForTopic = new ConcurrentHashMap<>();
     private boolean registered = false;
+    @Autowired
+    private TopicChangingNotifier topicChangingNotifier;
+    @Autowired
+    private CacheService cacheService;
 
     @Override
     public String getLastRunning(String topic) throws ParseException {
@@ -47,31 +56,36 @@ public class IndexerImpl implements Indexer{
     }
 
     @Override
-    public void setBaseDir(String baseDir) {
+    public void setBaseDir(final String baseDir) {
         runningsForTopic.clear();
         File root = new File(baseDir);
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + Constants.FILE_SEPARATOR + name + Constants.FILE_SEPARATOR + Constants.HISTORY_SUBFOLDER);
+                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });
         for (File topic: topics) {
             final String topicStr = topic.getName();
-            File history = new File(topic.getAbsolutePath() + Constants.FILE_SEPARATOR + Constants.HISTORY_SUBFOLDER);
+            File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
             history.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String timeStamp) {
                     Path pattern = Paths.get(dir.getAbsolutePath() +
-                            Constants.FILE_SEPARATOR + timeStamp + Constants.FILE_SEPARATOR + Constants.HISTORY_SUBFOLDER + Constants.FILE_SEPARATOR + Constants.OFFSETS_FILE_NAME);
+                            Helper.FILE_SEPARATOR + timeStamp + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER + Helper.FILE_SEPARATOR + Helper.OFFSETS_FILE_NAME);
                     try {
-                        if (Files.exists(pattern) || Files.isRegularFile(pattern) || Constants.TIME_STAMP_PATTERN.matcher(timeStamp).groupCount() == 6) {
+                        if (Files.exists(pattern) || Files.isRegularFile(pattern) || Helper.TIME_STAMP_PATTERN.matcher(timeStamp).groupCount() == 6) {
                             addFileToIndex(pattern.toAbsolutePath().toString(), topicStr, timeStamp);
+                            cacheService.get(Helper.getFileName(baseDir, topicStr, timeStamp)).getContent();
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                         return false;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
                     }
                     return true;
                 }
@@ -122,12 +136,12 @@ public class IndexerImpl implements Indexer{
         if (paths.length < 4) {
             return false;
         }
-        if (!paths[paths.length - 1].equals(Constants.OFFSETS_FILE_NAME)) {
+        if (!paths[paths.length - 1].equals(Helper.OFFSETS_FILE_NAME)) {
             return false;
         }
-        if (!paths[paths.length - 3].equals(Constants.HISTORY_SUBFOLDER)) {
+        if (!paths[paths.length - 3].equals(Helper.HISTORY_SUBFOLDER)) {
             return false;
         }
-        return Constants.TIME_STAMP_PATTERN.matcher(paths[paths.length - 2]).groupCount() == 6;
+        return Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - 2]).groupCount() == 6;
     }
 }

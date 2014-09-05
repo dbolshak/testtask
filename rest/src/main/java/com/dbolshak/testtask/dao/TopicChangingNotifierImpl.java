@@ -1,15 +1,11 @@
 package com.dbolshak.testtask.dao;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: dbolshak
- * Date: 9/5/14
- * Time: 7:51 AM
- * To change this template use File | Settings | File Templates.
- */
+@Component
 public class TopicChangingNotifierImpl implements TopicChangingNotifier {
     Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
     @Override
