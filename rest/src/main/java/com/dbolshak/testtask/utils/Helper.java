@@ -13,13 +13,12 @@ final public class Helper {
     public static final Pattern TIME_STAMP_PATTERN  = Pattern.compile(REG_EXP_DATE_PATTERN_STR);
     public static final String OFFSETS_FILE_NAME = "offsets.csv";
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
-    public static final String FULL_PATH_FORMATTER = "%s" + FILE_SEPARATOR + "%s" + FILE_SEPARATOR + HISTORY_SUBFOLDER + FILE_SEPARATOR + "%s" + FILE_SEPARATOR + OFFSETS_FILE_NAME;
 
     private Helper() {
     }
 
     public static String getFileName(String baseDir, String topic, String timeStamp) {
-        return String.format(FULL_PATH_FORMATTER, baseDir, topic, timeStamp);
+        return baseDir + FILE_SEPARATOR + topic + FILE_SEPARATOR + HISTORY_SUBFOLDER + FILE_SEPARATOR + timeStamp + FILE_SEPARATOR + OFFSETS_FILE_NAME;
     }
 
     public static boolean validateFileName(String fileName) {
