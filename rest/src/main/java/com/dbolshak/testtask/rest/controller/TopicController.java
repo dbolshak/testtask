@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by dbolshak on 03.09.2014.
  */
@@ -39,7 +41,7 @@ public class TopicController {
 
     @RequestMapping(value = "/statisticsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) {
+    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
         if (!topicService.topicExists(topic)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -49,7 +51,7 @@ public class TopicController {
 
     @RequestMapping(value = "/detailsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) {
+    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
         if (!topicService.topicExists(topic)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

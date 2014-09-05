@@ -33,6 +33,4 @@ public interface TopicChangingListener {
      * Registers me to get following events
      */
     void register();
-
-    void setBaseDir(String baseDir);
 }

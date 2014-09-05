@@ -1,5 +1,7 @@
 package com.dbolshak.testtask.rest.service;
 
+import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
@@ -10,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by dbolshak on 03.09.2014.
@@ -25,44 +26,60 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
     private Path baseDir; //it will be inited during startup.
     @Autowired
     private Indexer indexer;
+    @Autowired
+    private TopicDao topicDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();
-        ArrayList<String> topics = new ArrayList<>();
-        result.setExistingTopics(topics);
+        result.setExistingTopics(topicDao.findAllTopics());
         return result;
     }
 
     @Override
     public LastRunningDto findLastRunningFor(String topic) {
         LastRunningDto lastRunningDto = new LastRunningDto(topic);
+        lastRunningDto.setLastRunning(topicDao.findLastRunningFor(topic));
         return lastRunningDto;
     }
 
     @Override
-    public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) {
+    public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) throws ExecutionException, InterruptedException {
         StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
-        statisticsForLastRunningDto.setTotal(20);
-        statisticsForLastRunningDto.setMin(1);
-        statisticsForLastRunningDto.setMax(10);
-        statisticsForLastRunningDto.setAverage(2);
+        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        BigDecimal total = BigDecimal.ZERO;
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
+        double average = 0.0;
+        if (!timeStampInfo.getContent().isEmpty()) {
+            for (Long messageCount : timeStampInfo.getContent().values()) {
+                if (min >= messageCount) {
+                    min = messageCount;
+                }
+                if (max <= messageCount) {
+                    max = messageCount;
+                }
+                total = total.add(BigDecimal.valueOf(messageCount));
+            }
+            average = total.divide(BigDecimal.valueOf(timeStampInfo.getContent().size())).doubleValue();
+        }
+        statisticsForLastRunningDto.setTotal(total);
+        statisticsForLastRunningDto.setMin(min);
+        statisticsForLastRunningDto.setMax(max);
+        statisticsForLastRunningDto.setAverage(average);
         return statisticsForLastRunningDto;
     }
 
     @Override
-    public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) {
+    public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) throws ExecutionException, InterruptedException {
         LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(1, 2);
-        map.put(3, 4);
-        detailsForLastRunning.setMessagesForPartition(map);
+        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        detailsForLastRunning.setMessagesForPartition(timeStampInfo.getContent());
         return detailsForLastRunning;
     }
 
     @Override
     public boolean topicExists(String topic) {
-        //FIXME
-        return true;
+        return topicDao.exists(topic);
     }
 
     @Override
@@ -74,6 +91,7 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
         if (!Files.exists(path) || !Files.isDirectory(path)) {
             throw new InvalidConfigurationException("base_dir does not exist or it's not a directory.");
         }
+        topicDao.clear();
         indexer.setBaseDir(path.toAbsolutePath().toString());
     }
 }

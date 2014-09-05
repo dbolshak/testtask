@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class AbstractTopicChangingListener implements TopicChangingListener {
-    protected String baseDir;
     @Autowired
     private TopicChangingNotifier topicChangingNotifier;
 
@@ -27,10 +26,5 @@ public class AbstractTopicChangingListener implements TopicChangingListener {
     @PostConstruct
     public void register() {
         topicChangingNotifier.addListener(this);
-    }
-
-    @Override
-    public void setBaseDir(String baseDir) {
-        this.baseDir = baseDir;
     }
 }

@@ -1,7 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.dao.AbstractTopicChangingListener;
-import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +16,6 @@ public class CacheInvalidator extends AbstractTopicChangingListener {
 
     @Override
     public void onTimeStampDeleted(String topic, String timeStamp) {
-        cacheService.remove(Helper.getFileName(baseDir, topic, timeStamp));
+        cacheService.remove(topic, timeStamp);
     }
 }

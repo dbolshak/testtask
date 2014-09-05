@@ -1,15 +1,13 @@
 package com.dbolshak.testtask.rest.dto;
 
-/**
- * Created by dbolshak on 03.09.2014.
- */
-//int is not enough. TODO:FIXME
+import java.math.BigDecimal;
+
 public class StatisticsForLastRunningDto {
     private String topic;
-    private int total;
-    private int min;
-    private int max;
-    private int average;
+    private BigDecimal total;
+    private long min;
+    private long max;
+    private double average;
 
     public StatisticsForLastRunningDto(String topic) {
         this.topic = topic;
@@ -19,35 +17,35 @@ public class StatisticsForLastRunningDto {
         return topic;
     }
 
-    public int getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public int getMin() {
+    public long getMin() {
         return min;
     }
 
-    public void setMin(int min) {
+    public void setMin(long min) {
         this.min = min;
     }
 
-    public int getMax() {
+    public long getMax() {
         return max;
     }
 
-    public void setMax(int max) {
+    public void setMax(long max) {
         this.max = max;
     }
 
-    public int getAverage() {
+    public double getAverage() {
         return average;
     }
 
-    public void setAverage(int average) {
+    public void setAverage(double average) {
         this.average = average;
     }
 }

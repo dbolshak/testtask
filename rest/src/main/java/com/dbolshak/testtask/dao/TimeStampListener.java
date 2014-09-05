@@ -1,24 +1,20 @@
 package com.dbolshak.testtask.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimeStampListener extends AbstractTopicChangingListener {
-    //@Autowired
-    //private TopicDao topicDao;
+    @Autowired
+    private TopicDao topicDao;
 
     @Override
     public void onTimeStampAdded(String topic, String timeStamp) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onTimeStampModified(String topic, String timeStamp) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        topicDao.addTimeStamp(timeStamp, topic);
     }
 
     @Override
     public void onTimeStampDeleted(String topic, String timeStamp) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        topicDao.removeTimeStamp(timeStamp, topic);
     }
 }

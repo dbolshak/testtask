@@ -5,6 +5,8 @@ import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by dbolshak on 03.09.2014.
  */
@@ -22,7 +24,7 @@ public interface TopicService {
 
     LastRunningDto findLastRunningFor(String topic);
 
-    StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic);
+    StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) throws ExecutionException, InterruptedException;
 
-    LastRunningDetailsDto getLastRunningDetailsByTopic(String topic);
+    LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) throws ExecutionException, InterruptedException;
 }

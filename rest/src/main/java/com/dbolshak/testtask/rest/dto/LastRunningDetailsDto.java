@@ -7,17 +7,17 @@ import java.util.Map;
  */
 public class LastRunningDetailsDto {
     private String topic;
-    private Map<Integer, Integer> messagesForPartition;
+    private Map<Integer, Long> messagesForPartition;
 
     public LastRunningDetailsDto(String topic) {
         this.topic = topic;
     }
 
-    public Map<Integer, Integer> getMessagesForPartition() {
+    public Map<Integer, Long> getMessagesForPartition() {
         return messagesForPartition;
     }
 
-    public void setMessagesForPartition(Map<Integer, Integer> messagesForPartition) {
+    public void setMessagesForPartition(Map<Integer, Long> messagesForPartition) {
         this.messagesForPartition = messagesForPartition;
     }
 
