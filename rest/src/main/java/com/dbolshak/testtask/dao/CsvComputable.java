@@ -13,16 +13,17 @@ import java.io.IOException;
 public class CsvComputable implements Computable {
     @Override
     public TimeStampInfo compute(String file) throws InterruptedException, IOException {
-        CSVReader reader = new CSVReader(new FileReader(file));
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        String[] nextLine;
-        while ((nextLine = reader.readNext()) != null) {
-            try {
-                timeStampInfo.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                e.printStackTrace();
+        try (CSVReader reader = new CSVReader(new FileReader(file))) {
+            TimeStampInfo timeStampInfo = new TimeStampInfo();
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                try {
+                    timeStampInfo.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
+            return timeStampInfo;
         }
-        return timeStampInfo;
     }
 }
