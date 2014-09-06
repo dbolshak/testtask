@@ -34,7 +34,7 @@ public class IndexerImpl implements Indexer {
 
     @Override
     public void setBaseDir(final String baseDir) throws FileSystemException {
-        LOG.info (String.format("Going to index: %s directory"), baseDir);
+        LOG.info (String.format("Going to index: %s directory", baseDir));
 
         cacheService.setBaseDir(baseDir);
         File root = new File(baseDir);
