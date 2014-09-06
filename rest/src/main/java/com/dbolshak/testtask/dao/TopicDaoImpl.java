@@ -8,11 +8,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 
 @Repository
 public class TopicDaoImpl implements TopicDao {
-    private Map<String, TreeSet<String>> storage = new ConcurrentHashMap<>(100000);
+    private Map<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;
 
@@ -28,7 +29,7 @@ public class TopicDaoImpl implements TopicDao {
 
     @Override
     public void removeTimeStamp(String timeStamp, String topic) {
-        TreeSet<String> timeStamps = storage.get(topic);
+        ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
         if (timeStamps != null && !timeStamps.isEmpty()) {
             timeStamps.remove(timeStamp);
         }
@@ -36,13 +37,13 @@ public class TopicDaoImpl implements TopicDao {
 
     @Override
     public void addTimeStamp(String timeStamp, String topic) {
-        TreeSet<String> timeStamps = findOrCreate(topic);
+        ConcurrentSkipListSet<String> timeStamps = findOrCreate(topic);
         timeStamps.add(timeStamp);
     }
 
     @Override
     public String findLastRunningFor(String topic) {
-        TreeSet<String> timeStamps = storage.get(topic);
+        ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
         if (timeStamps != null && !timeStamps.isEmpty()) {
             return timeStamps.last();
         }
@@ -56,16 +57,13 @@ public class TopicDaoImpl implements TopicDao {
 
     @Override
     public boolean exists(String topic) {
-        TreeSet<String> timeStamps = storage.get(topic);
+        ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
         return timeStamps != null && !timeStamps.isEmpty();
     }
 
-    private TreeSet<String> findOrCreate(String topic) {
-        TreeSet<String> running = storage.get(topic);
-        if (running == null) {
-            running = new TreeSet<>();
-            storage.put(topic, running);
-        }
-        return running;
+    private ConcurrentSkipListSet<String> findOrCreate(String topic) {
+        ConcurrentSkipListSet<String> running = new ConcurrentSkipListSet<>();
+        storage.putIfAbsent(topic, running);
+        return storage.get(topic);
     }
 }

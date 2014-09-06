@@ -12,7 +12,9 @@ import java.util.concurrent.*;
 
 @Component("cacheSerivce")
 public class CacheServiceImpl implements Computable, CacheService {
-    private final ConcurrentMap<String, Future<TimeStampInfo>> cache = new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1000000).build();
+    private final ConcurrentMap<String, Future<TimeStampInfo>> cache =
+            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1000000).build();
+
     @Autowired
     private Computable fileReader;
     private String baseDir;

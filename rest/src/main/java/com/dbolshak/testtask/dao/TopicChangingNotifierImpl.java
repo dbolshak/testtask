@@ -48,12 +48,10 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                 }
             }
         });
-        fm.setDelay(60_000);//1 min delay, should solve some performance issue, but we must wait 1 min :-(
         fm.setRecursive(true);
         fm.addFile(listenDir);
-        LOG.info("Setting VFS listener before start");
         fm.start();
-        LOG.info("Setting VFS listener fiished");
+        LOG.info("Setting VFS listener finished");
     }
 
     @Override
