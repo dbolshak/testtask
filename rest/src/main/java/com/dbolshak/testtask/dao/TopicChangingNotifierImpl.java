@@ -48,6 +48,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                 }
             }
         });
+        LOG.info("Setting VFS listener started - delay" + fm.getDelay());
         fm.setRecursive(true);
         fm.addFile(listenDir);
         LOG.info("Setting VFS listener before start");
