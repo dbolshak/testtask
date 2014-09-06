@@ -59,7 +59,16 @@ public class IndexerImpl implements Indexer {
             Collections.sort(timeStamps);
             topicDao.addTimeStamp(timeStamps.get(timeStamps.size() - 1), topicStr);
         }
-        topicChangingNotifier.setBaseDir(baseDir);
+        new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
+            @Override
+            public void run() {
+                try {
+                    topicChangingNotifier.setBaseDir(baseDir);
+                } catch (FileSystemException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        }).start();
 
         LOG.info ("Indexing has finished");
     }
