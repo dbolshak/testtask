@@ -3,6 +3,8 @@ package com.dbolshak.testtask.dao;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.*;
 import org.apache.commons.vfs2.impl.DefaultFileMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -10,10 +12,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class TopicChangingNotifierImpl implements TopicChangingNotifier {
-    Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
+    private Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
 
     @Override
     public void setBaseDir(String baseDir) throws FileSystemException {
+        LOG.info("Setting VFS listener started");
         FileSystemManager fsManager = VFS.getManager();
         FileObject listenDir = fsManager.resolveFile(baseDir);
         DefaultFileMonitor fm = new DefaultFileMonitor(new FileListener() {
@@ -46,7 +50,9 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
         });
         fm.setRecursive(true);
         fm.addFile(listenDir);
+        LOG.info("Setting VFS listener before start");
         fm.start();
+        LOG.info("Setting VFS listener fiished");
     }
 
     @Override
