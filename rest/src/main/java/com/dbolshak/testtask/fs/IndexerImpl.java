@@ -5,6 +5,8 @@ import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.dao.cache.CacheService;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.FileSystemException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import java.util.Collections;
  */
 @Service("indexer")
 public class IndexerImpl implements Indexer {
+    private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
     @Autowired
     private TopicChangingNotifier topicChangingNotifier;
     @Autowired
@@ -31,6 +34,8 @@ public class IndexerImpl implements Indexer {
 
     @Override
     public void setBaseDir(final String baseDir) throws FileSystemException {
+        LOG.info (String.format("Going to index: %s directory"), baseDir);
+
         cacheService.setBaseDir(baseDir);
         File root = new File(baseDir);
         File[] topics = root.listFiles(new FilenameFilter() {
@@ -55,5 +60,7 @@ public class IndexerImpl implements Indexer {
             topicDao.addTimeStamp(timeStamps.get(timeStamps.size() - 1), topicStr);
         }
         topicChangingNotifier.setBaseDir(baseDir);
+
+        LOG.info ("Indexing has finished");
     }
 }
