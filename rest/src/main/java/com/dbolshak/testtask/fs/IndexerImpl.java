@@ -13,6 +13,8 @@ import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by dbolshak on 04.09.2014.
@@ -41,15 +43,16 @@ public class IndexerImpl implements Indexer {
         for (final File topic : topics) {
             final String topicStr = topic.getName();
             File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
+            final ArrayList<String> timeStamps = new ArrayList<>(10000);
             history.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String timeStamp) {
-                    if (Helper.validateFileName(Helper.getFileName(baseDir, topicStr, timeStamp))) {
-                        topicDao.addTimeStamp(timeStamp, topicStr);
-                    }
+                    timeStamps.add(timeStamp);
                     return true;
                 }
             });
+            Collections.sort(timeStamps);
+            topicDao.addTimeStamp(timeStamps.get(timeStamps.size() - 1), topicStr);
         }
         topicChangingNotifier.setBaseDir(baseDir);
     }
