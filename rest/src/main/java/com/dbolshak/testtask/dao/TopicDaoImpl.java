@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 @Repository
 public class TopicDaoImpl implements TopicDao {
-    private Map<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
+    private ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;
 

@@ -47,10 +47,9 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
         StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
         TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
         BigDecimal total = BigDecimal.ZERO;
-        long min = Long.MAX_VALUE;
-        long max = Long.MIN_VALUE;
-        double average = 0.0;
         if (!timeStampInfo.getContent().isEmpty()) {
+            long min = Long.MAX_VALUE;
+            long max = Long.MIN_VALUE;
             for (Long messageCount : timeStampInfo.getContent().values()) {
                 if (min >= messageCount) {
                     min = messageCount;
@@ -60,12 +59,11 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
                 }
                 total = total.add(BigDecimal.valueOf(messageCount));
             }
-            average = total.divide(BigDecimal.valueOf(timeStampInfo.getContent().size())).doubleValue();
+            statisticsForLastRunningDto.setMin(min);
+            statisticsForLastRunningDto.setMax(max);
+            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampInfo.getContent().size())).doubleValue());
         }
         statisticsForLastRunningDto.setTotal(total);
-        statisticsForLastRunningDto.setMin(min);
-        statisticsForLastRunningDto.setMax(max);
-        statisticsForLastRunningDto.setAverage(average);
         return statisticsForLastRunningDto;
     }
 
