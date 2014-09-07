@@ -11,10 +11,9 @@ import org.apache.commons.vfs2.FileSystemException;
  */
 public interface TopicChangingNotifier {
     /**
-     * Sets a directory where topics are located
-     * @param baseDir absolute or relative path to a directory
+     * inits out notifier
      */
-    void setBaseDir(String baseDir) throws FileSystemException;
+    void init() throws FileSystemException;
 
     /**
      * Adds a listener, which will be notified about changes in baseDir

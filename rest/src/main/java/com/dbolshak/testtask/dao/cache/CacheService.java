@@ -30,6 +30,4 @@ public interface CacheService {
     TimeStampInfo get(String file) throws InterruptedException, ExecutionException;
 
     TimeStampInfo get(String topic, String timeStamp) throws InterruptedException, ExecutionException;
-
-    void setBaseDir(String baseDir);
 }

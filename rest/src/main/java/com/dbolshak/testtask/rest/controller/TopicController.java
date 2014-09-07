@@ -21,8 +21,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Controller
 public class TopicController {
-    @Autowired
-    TopicService topicService;
+    @Autowired private TopicService topicService;
 
     @RequestMapping(value = "/topics", method = RequestMethod.GET)
     @ResponseBody

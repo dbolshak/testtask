@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
+import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampInfo;
 import com.dbolshak.testtask.utils.Helper;
@@ -10,14 +11,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.*;
 
-@Component("cacheSerivce")
+@Component
 public class CacheServiceImpl implements Computable, CacheService {
     private final ConcurrentMap<String, Future<TimeStampInfo>> cache =
-            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1000000).build();
-
-    @Autowired
-    private Computable fileReader;
-    private String baseDir;
+            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1_000_000).build();
+    @Autowired private BaseDirProvider baseDirProvider;
+    @Autowired private Computable fileReader;
 
     @Override
     public TimeStampInfo compute(final String file) throws InterruptedException, ExecutionException {
@@ -40,9 +39,6 @@ public class CacheServiceImpl implements Computable, CacheService {
                 return f.get();
             } catch (CancellationException e) {
                 cache.remove(file, f);
-            } catch (ExecutionException e) {
-                //throw launderThrowable(e.getCause());
-                throw new ExecutionException(e);
             }
         }
     }
@@ -54,7 +50,7 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public void remove(String topic, String timeStamp) {
-        cache.remove(Helper.getFileName(baseDir, topic, timeStamp));
+        remove(Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp));
     }
 
     @Override
@@ -64,11 +60,6 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public TimeStampInfo get(String topic, String timeStamp) throws InterruptedException, ExecutionException {
-        return get(Helper.getFileName(baseDir, topic, timeStamp));
-    }
-
-    @Override
-    public void setBaseDir(String baseDir) {
-        this.baseDir = baseDir;
+        return get(Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp));
     }
 }

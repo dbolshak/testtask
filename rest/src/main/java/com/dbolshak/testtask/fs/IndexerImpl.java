@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.fs;
 
+import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.dao.TopicChangingNotifier;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.dao.cache.CacheService;
@@ -15,9 +16,11 @@ import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -26,19 +29,18 @@ import java.util.concurrent.*;
 @Service("indexer")
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
-    @Autowired
-    private TopicChangingNotifier topicChangingNotifier;
-    @Autowired
-    private TopicDao topicDao;
-    @Autowired
-    private CacheService cacheService;
+
+    @Autowired private TopicChangingNotifier topicChangingNotifier;
+    @Autowired private TopicDao topicDao;
+    @Autowired private CacheService cacheService;
+    @Autowired private BaseDirProvider baseDirProvider;
 
 
     @Override
     public void setBaseDir(final String baseDir) throws FileSystemException {
+        baseDirProvider.setBaseDir(baseDir);
         LOG.info (String.format("Going to index: %s directory", baseDir));
 
-        cacheService.setBaseDir(baseDir);
         File root = new File(baseDir);
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
@@ -49,12 +51,12 @@ public class IndexerImpl implements Indexer {
         });
 
         ExecutorService executor = Executors.newFixedThreadPool(16);
-        List<Future<Void>> list = new ArrayList<>(1000);
+        List<Future<Map.Entry<String, String>>> list = new ArrayList<>(1000);
 
         for (final File topic : topics) {
-            Future<Void> future = executor.submit(new Callable<Void>() {
+            Future<Map.Entry<String, String>> future = executor.submit(new Callable<Map.Entry<String, String>>() {
                 @Override
-                public Void call() throws Exception {
+                public Map.Entry<String, String> call() throws Exception {
                     final String topicStr = topic.getName();
                     File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
                     final String[] latestRunning = new String[]{""};
@@ -67,15 +69,15 @@ public class IndexerImpl implements Indexer {
                             return true;
                         }
                     });
-                    topicDao.addTimeStamp(latestRunning[0], topicStr);
-                    return null;
+                    return new AbstractMap.SimpleEntry<String, String>(latestRunning[0], topicStr);
                 }
             });
             list.add(future);
         }
-        for(Future<Void> fut : list){
+        for(Future<Map.Entry<String, String>> fut : list){
             try {
-                fut.get();
+                Map.Entry<String, String> timeStampAndTopic = fut.get();
+                topicDao.addTimeStamp(timeStampAndTopic.getKey(), timeStampAndTopic.getValue());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -86,7 +88,7 @@ public class IndexerImpl implements Indexer {
             @Override
             public void run() {
                 try {
-                    topicChangingNotifier.setBaseDir(baseDir);
+                    topicChangingNotifier.init();
                 } catch (FileSystemException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }

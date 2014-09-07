@@ -1,14 +1,11 @@
 package com.dbolshak.testtask.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Component
 public class AbstractTopicChangingListener implements TopicChangingListener {
-    @Autowired
-    private TopicChangingNotifier topicChangingNotifier;
+    @Autowired private TopicChangingNotifier topicChangingNotifier;
 
     @Override
     public void onTimeStampAdded(String topic, String timeStamp) {

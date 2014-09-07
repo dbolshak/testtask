@@ -23,11 +23,8 @@ import java.util.concurrent.ExecutionException;
  */
 @Service("topicService")
 public class TopicServiceImpl implements TopicService, CommandLineRunner {
-    private Path baseDir; //it will be inited during startup.
-    @Autowired
-    private Indexer indexer;
-    @Autowired
-    private TopicDao topicDao;
+    @Autowired private Indexer indexer;
+    @Autowired private TopicDao topicDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();
