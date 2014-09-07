@@ -9,9 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ApplicationRunner implements CommandLineRunner{
-    @Autowired private BaseDirProvider baseDirProvider;
-    @Autowired private Indexer indexer;
+public class ApplicationRunner implements CommandLineRunner {
+    @Autowired
+    private BaseDirProvider baseDirProvider;
+    @Autowired
+    private Indexer indexer;
 
     @Override
     public void run(String... strings) throws Exception {

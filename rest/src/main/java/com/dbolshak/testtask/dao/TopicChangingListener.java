@@ -8,22 +8,25 @@ package com.dbolshak.testtask.dao;
  * To change this template use File | Settings | File Templates.
  */
 public interface TopicChangingListener {
-    /***
+    /**
      * Callback to handle adding a new file
+     *
      * @param topic
      * @param timeStamp
      */
     void onTimeStampAdded(String topic, String timeStamp);
 
-    /***
+    /**
      * Callback to handle modifying a new file
+     *
      * @param topic
      * @param timeStamp
      */
     void onTimeStampModified(String topic, String timeStamp);
 
-    /***
+    /**
      * Callback to handle deleting a file
+     *
      * @param topic
      * @param timeStamp
      */

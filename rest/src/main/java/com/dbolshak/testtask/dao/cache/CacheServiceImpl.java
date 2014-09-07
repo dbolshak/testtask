@@ -1,22 +1,29 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampInfo;
-import com.dbolshak.testtask.utils.Helper;
+import com.dbolshak.testtask.fs.FileSystemService;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 @Component
 public class CacheServiceImpl implements Computable, CacheService {
     private final ConcurrentMap<String, Future<TimeStampInfo>> cache =
             new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1_000_000).build();
-    @Autowired private BaseDirProvider baseDirProvider;
-    @Autowired private Computable fileReader;
+
+    @Autowired
+    private Computable fileReader;
+    @Autowired
+    private FileSystemService fileSystemService;
 
     @Override
     public TimeStampInfo compute(final String file) throws InterruptedException, ExecutionException {
@@ -50,7 +57,7 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public void remove(String topic, String timeStamp) {
-        remove(Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp));
+        remove(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 
     @Override
@@ -60,6 +67,6 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public TimeStampInfo get(String topic, String timeStamp) throws InterruptedException, ExecutionException {
-        return get(Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp));
+        return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 }

@@ -3,7 +3,6 @@ package com.dbolshak.testtask.fs;
 import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.dao.TopicChangingNotifier;
 import com.dbolshak.testtask.dao.TopicDao;
-import com.dbolshak.testtask.dao.cache.CacheService;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.FileSystemException;
 import org.slf4j.Logger;
@@ -18,10 +17,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by dbolshak on 04.09.2014.
@@ -30,15 +32,19 @@ import java.util.concurrent.*;
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
 
-    @Autowired private TopicChangingNotifier topicChangingNotifier;
-    @Autowired private TopicDao topicDao;
-    @Autowired private BaseDirProvider baseDirProvider;
-    @Autowired private FileSystemService fileSystemService;
+    @Autowired
+    private TopicChangingNotifier topicChangingNotifier;
+    @Autowired
+    private TopicDao topicDao;
+    @Autowired
+    private BaseDirProvider baseDirProvider;
+    @Autowired
+    private FileSystemService fileSystemService;
 
 
     @Override
     public void start() throws FileSystemException {
-        LOG.info (String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
+        LOG.info(String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
 
         File root = new File(baseDirProvider.getBaseDir());
         File[] topics = root.listFiles(new FilenameFilter() {
@@ -62,7 +68,7 @@ public class IndexerImpl implements Indexer {
             });
             list.add(future);
         }
-        for(Future<Map.Entry<String, String>> fut : list){
+        for (Future<Map.Entry<String, String>> fut : list) {
             try {
                 Map.Entry<String, String> timeStampAndTopic = fut.get();
                 topicDao.addTimeStamp(timeStampAndTopic.getKey(), timeStampAndTopic.getValue());
@@ -83,6 +89,6 @@ public class IndexerImpl implements Indexer {
             }
         }).start();
 
-        LOG.info ("Indexing has finished");
+        LOG.info("Indexing has finished");
     }
 }

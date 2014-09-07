@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +12,8 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class TopicDaoImpl implements TopicDao {
     private ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
-    @Autowired private CacheService cacheService;
+    @Autowired
+    private CacheService cacheService;
 
     @Override
     public Collection<String> findAllTopics() {

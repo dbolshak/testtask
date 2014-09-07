@@ -6,6 +6,7 @@ package com.dbolshak.testtask;
 public interface BaseDirProvider {
     /**
      * Sets a baseDir which is provided during application bootstrap
+     *
      * @param baseDir
      */
     void setBaseDir(String baseDir);

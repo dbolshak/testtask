@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @DependsOn("timeStampListener")
 public class CacheInvalidator extends AbstractTopicChangingListener {
-    @Autowired private CacheService cacheService;
+    @Autowired
+    private CacheService cacheService;
 
     @Override
     public void onTimeStampModified(String topic, String timeStamp) {

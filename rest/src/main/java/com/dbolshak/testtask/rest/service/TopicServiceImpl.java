@@ -7,15 +7,10 @@ import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
-import com.dbolshak.testtask.rest.exceptions.InvalidConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,8 +18,10 @@ import java.util.concurrent.ExecutionException;
  */
 @Service("topicService")
 public class TopicServiceImpl implements TopicService {
-    @Autowired private Indexer indexer;
-    @Autowired private TopicDao topicDao;
+    @Autowired
+    private Indexer indexer;
+    @Autowired
+    private TopicDao topicDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();

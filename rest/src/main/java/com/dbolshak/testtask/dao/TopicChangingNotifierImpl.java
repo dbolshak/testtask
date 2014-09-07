@@ -2,7 +2,12 @@ package com.dbolshak.testtask.dao;
 
 import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.utils.Helper;
-import org.apache.commons.vfs2.*;
+import org.apache.commons.vfs2.FileChangeEvent;
+import org.apache.commons.vfs2.FileListener;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.impl.DefaultFileMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +20,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class TopicChangingNotifierImpl implements TopicChangingNotifier {
     private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
+
     private Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
-    @Autowired private BaseDirProvider baseDirProvider;
+
+    @Autowired
+    private BaseDirProvider baseDirProvider;
 
     @Override
     public void init() throws FileSystemException {
