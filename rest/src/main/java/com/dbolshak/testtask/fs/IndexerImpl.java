@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Created by dbolshak on 04.09.2014.
@@ -45,20 +47,41 @@ public class IndexerImpl implements Indexer {
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });
+
+        ExecutorService executor = Executors.newFixedThreadPool(16);
+        List<Future<Void>> list = new ArrayList<>(1000);
+
         for (final File topic : topics) {
-            final String topicStr = topic.getName();
-            File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
-            final ArrayList<String> timeStamps = new ArrayList<>(10000);
-            history.listFiles(new FilenameFilter() {
+            Future<Void> future = executor.submit(new Callable<Void>() {
                 @Override
-                public boolean accept(File dir, String timeStamp) {
-                    timeStamps.add(timeStamp);
-                    return true;
+                public Void call() throws Exception {
+                    final String topicStr = topic.getName();
+                    File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
+                    final String[] latestRunning = new String[]{""};
+                    history.listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String timeStamp) {
+                            if (latestRunning[0].compareTo(timeStamp) < 0) {
+                                latestRunning[0] = timeStamp;
+                            }
+                            return true;
+                        }
+                    });
+                    topicDao.addTimeStamp(latestRunning[0], topicStr);
+                    return null;
                 }
             });
-            Collections.sort(timeStamps);
-            topicDao.addTimeStamp(timeStamps.get(timeStamps.size() - 1), topicStr);
+            list.add(future);
         }
+        for(Future<Void> fut : list){
+            try {
+                fut.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        executor.shutdown();
+
         new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
             @Override
             public void run() {
