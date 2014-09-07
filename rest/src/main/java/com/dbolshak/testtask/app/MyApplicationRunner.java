@@ -8,13 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ApplicationRunner implements CommandLineRunner {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationRunner.class);
+@Component
+public class MyApplicationRunner implements CommandLineRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(MyApplicationRunner.class);
     @Autowired
     private BaseDirProvider baseDirProvider;
     @Autowired
@@ -33,16 +35,16 @@ public class ApplicationRunner implements CommandLineRunner {
         }
 
         baseDirProvider.setBaseDir(path.toAbsolutePath().toString());
-        indexer.start();
+        //indexer.start();
 
         new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
             @Override
             public void run() {
-                try {
-                    topicChangingNotifier.init();
-                } catch (FileSystemException e) {
-                    LOG.warn ("Listening to file system events based on VFS is failed becuase exception", e);
-                }
+                //try {
+                    //topicChangingNotifier.init();
+                //} catch (FileSystemException e) {
+                    //LOG.warn ("Listening to file system events based on VFS is failed becuase exception", e);
+                //}
             }
         }).start();
     }
