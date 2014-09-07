@@ -3,15 +3,11 @@ package com.dbolshak.testtask.dao;
 import org.apache.commons.vfs2.FileSystemException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dbolshak
- * Date: 9/5/14
- * Time: 7:44 AM
- * To change this template use File | Settings | File Templates.
+ * This interface provides basic functionality for events propagating to their listeners
  */
 public interface TopicChangingNotifier {
     /**
-     * inits out notifier
+     * initializes our notifier
      */
     void init() throws FileSystemException;
 

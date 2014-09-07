@@ -1,7 +1,7 @@
 package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.dao.Computable;
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,8 @@ import java.util.concurrent.FutureTask;
 
 @Component
 public class CacheServiceImpl implements Computable, CacheService {
-    private final ConcurrentMap<String, Future<TimeStampInfo>> cache =
-            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1_000_000).build();
+    private final ConcurrentMap<String, Future<TimeStampContent>> cache =
+            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampContent>>().maximumWeightedCapacity(1_000_000).build();
 
     @Autowired
     private Computable fileReader;
@@ -26,16 +26,16 @@ public class CacheServiceImpl implements Computable, CacheService {
     private FileSystemService fileSystemService;
 
     @Override
-    public TimeStampInfo compute(final String file) throws InterruptedException, ExecutionException {
+    public TimeStampContent compute(final String file) throws InterruptedException, ExecutionException {
         while (true) {
-            Future<TimeStampInfo> f = cache.get(file);
+            Future<TimeStampContent> f = cache.get(file);
             if (f == null) {
-                Callable<TimeStampInfo> eval = new Callable<TimeStampInfo>() {
-                    public TimeStampInfo call() throws InterruptedException, IOException, ExecutionException {
+                Callable<TimeStampContent> callable = new Callable<TimeStampContent>() {
+                    public TimeStampContent call() throws InterruptedException, IOException, ExecutionException {
                         return fileReader.compute(file);
                     }
                 };
-                FutureTask<TimeStampInfo> ft = new FutureTask<>(eval);
+                FutureTask<TimeStampContent> ft = new FutureTask<>(callable);
                 f = cache.putIfAbsent(file, ft);
                 if (f == null) {
                     f = ft;
@@ -61,12 +61,12 @@ public class CacheServiceImpl implements Computable, CacheService {
     }
 
     @Override
-    public TimeStampInfo get(String file) throws InterruptedException, ExecutionException {
+    public TimeStampContent get(String file) throws InterruptedException, ExecutionException {
         return compute(file);
     }
 
     @Override
-    public TimeStampInfo get(String topic, String timeStamp) throws InterruptedException, ExecutionException {
+    public TimeStampContent get(String topic, String timeStamp) throws InterruptedException, ExecutionException {
         return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 }

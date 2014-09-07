@@ -12,18 +12,18 @@ import java.io.IOException;
 @Component("fileReader")
 public class CsvComputable implements Computable {
     @Override
-    public TimeStampInfo compute(String file) throws InterruptedException, IOException {
+    public TimeStampContent compute(String file) throws InterruptedException, IOException {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            TimeStampInfo timeStampInfo = new TimeStampInfo();
+            TimeStampContent timeStampContent = new TimeStampContent();
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 try {
-                    timeStampInfo.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
+                    timeStampContent.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
                     e.printStackTrace();
                 }
             }
-            return timeStampInfo;
+            return timeStampContent;
         }
     }
 }

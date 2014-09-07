@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,7 +11,7 @@ public interface CacheService {
     /**
      * Removes a cached value based on absolute file path
      *
-     * @param file
+     * @param file specified a file for which we don't need to keep its content in cache
      */
     void remove(String file);
 
@@ -23,11 +23,11 @@ public interface CacheService {
     /**
      * Returns value from cache. In case of cache missing it loads it to cache.
      *
-     * @param file
+     * @param file a file content of which must be fetched from cache (or cached in case of cache missing)
      * @return
      * @throws InterruptedException
      */
-    TimeStampInfo get(String file) throws InterruptedException, ExecutionException;
+    TimeStampContent get(String file) throws InterruptedException, ExecutionException;
 
-    TimeStampInfo get(String topic, String timeStamp) throws InterruptedException, ExecutionException;
+    TimeStampContent get(String topic, String timeStamp) throws InterruptedException, ExecutionException;
 }

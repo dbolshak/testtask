@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TopicChangingNotifierImpl implements TopicChangingNotifier {
     private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
 
-    private Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
+    private final Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
 
     @Autowired
     private BaseDirProvider baseDirProvider;

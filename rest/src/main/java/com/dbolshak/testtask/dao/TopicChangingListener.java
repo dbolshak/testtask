@@ -1,11 +1,7 @@
 package com.dbolshak.testtask.dao;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dbolshak
- * Date: 9/5/14
- * Time: 7:40 AM
- * To change this template use File | Settings | File Templates.
+ * If you want to be notified about changes in baseDir please implement this interface and register your instance
  */
 public interface TopicChangingListener {
     /**

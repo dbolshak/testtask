@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
@@ -39,12 +39,12 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) throws ExecutionException, InterruptedException {
         StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
-        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
         BigDecimal total = BigDecimal.ZERO;
-        if (!timeStampInfo.getContent().isEmpty()) {
+        if (!timeStampContent.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
             long max = Long.MIN_VALUE;
-            for (Long messageCount : timeStampInfo.getContent().values()) {
+            for (Long messageCount : timeStampContent.getContent().values()) {
                 if (min >= messageCount) {
                     min = messageCount;
                 }
@@ -55,7 +55,7 @@ public class TopicServiceImpl implements TopicService {
             }
             statisticsForLastRunningDto.setMin(min);
             statisticsForLastRunningDto.setMax(max);
-            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampInfo.getContent().size())).doubleValue());
+            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampContent.getContent().size())).doubleValue());
         }
         statisticsForLastRunningDto.setTotal(total);
         return statisticsForLastRunningDto;
@@ -64,8 +64,8 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) throws ExecutionException, InterruptedException {
         LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
-        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
-        detailsForLastRunning.setMessagesForPartition(timeStampInfo.getContent());
+        TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        detailsForLastRunning.setMessagesForPartition(timeStampContent.getContent());
         return detailsForLastRunning;
     }
 

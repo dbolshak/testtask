@@ -43,14 +43,14 @@ public class IndexerImpl implements Indexer {
 
 
     @Override
-    public void start() throws FileSystemException {
+    public void start() {
         LOG.info(String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
 
         File root = new File(baseDirProvider.getBaseDir());
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
+                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });

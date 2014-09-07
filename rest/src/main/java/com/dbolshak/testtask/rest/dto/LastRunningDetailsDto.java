@@ -6,7 +6,7 @@ import java.util.Map;
  * Created by dbolshak on 03.09.2014.
  */
 public class LastRunningDetailsDto {
-    private String topic;
+    private final String topic;
     private Map<Integer, Long> messagesForPartition;
 
     public LastRunningDetailsDto(String topic) {

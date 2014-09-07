@@ -3,7 +3,7 @@ package com.dbolshak.testtask.rest.dto;
 import java.math.BigDecimal;
 
 public class StatisticsForLastRunningDto {
-    private String topic;
+    private final String topic;
     private BigDecimal total;
     private long min;
     private long max;

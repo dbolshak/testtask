@@ -4,7 +4,7 @@ package com.dbolshak.testtask.rest.dto;
  * Created by dbolshak on 03.09.2014.
  */
 public class LastRunningDto {
-    private String topic;
+    private final String topic;
     private String lastRunning;
 
     public LastRunningDto(String topic) {
