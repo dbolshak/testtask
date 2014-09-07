@@ -32,16 +32,15 @@ public class IndexerImpl implements Indexer {
 
     @Autowired private TopicChangingNotifier topicChangingNotifier;
     @Autowired private TopicDao topicDao;
-    @Autowired private CacheService cacheService;
     @Autowired private BaseDirProvider baseDirProvider;
+    @Autowired private FileSystemService fileSystemService;
 
 
     @Override
-    public void setBaseDir(final String baseDir) throws FileSystemException {
-        baseDirProvider.setBaseDir(baseDir);
-        LOG.info (String.format("Going to index: %s directory", baseDir));
+    public void start() throws FileSystemException {
+        LOG.info (String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
 
-        File root = new File(baseDir);
+        File root = new File(baseDirProvider.getBaseDir());
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -57,19 +56,8 @@ public class IndexerImpl implements Indexer {
             Future<Map.Entry<String, String>> future = executor.submit(new Callable<Map.Entry<String, String>>() {
                 @Override
                 public Map.Entry<String, String> call() throws Exception {
-                    final String topicStr = topic.getName();
-                    File history = new File(topic.getAbsolutePath() + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
-                    final String[] latestRunning = new String[]{""};
-                    history.listFiles(new FilenameFilter() {
-                        @Override
-                        public boolean accept(File dir, String timeStamp) {
-                            if (latestRunning[0].compareTo(timeStamp) < 0) {
-                                latestRunning[0] = timeStamp;
-                            }
-                            return true;
-                        }
-                    });
-                    return new AbstractMap.SimpleEntry<String, String>(latestRunning[0], topicStr);
+                    String topicStr = topic.getName();
+                    return new AbstractMap.SimpleEntry<String, String>(fileSystemService.getLatestRunning(topicStr), topicStr);
                 }
             });
             list.add(future);

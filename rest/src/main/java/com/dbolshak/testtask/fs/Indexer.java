@@ -7,9 +7,7 @@ import org.apache.commons.vfs2.FileSystemException;
  */
 public interface Indexer {
     /**
-     * Sets a baseDir where we need to index content with topics
-     * @param baseDir a file system path to directory with topics (absolute or relative).
-     * @note In ideal case the method could be called only once (during bootstrapping application)
+     * Start indexing and other necessary service when application is ready
      */
-    void setBaseDir(String baseDir) throws FileSystemException;
+    void start() throws FileSystemException;
 }

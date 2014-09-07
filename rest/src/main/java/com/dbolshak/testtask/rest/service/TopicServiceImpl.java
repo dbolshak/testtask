@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  * Created by dbolshak on 03.09.2014.
  */
 @Service("topicService")
-public class TopicServiceImpl implements TopicService, CommandLineRunner {
+public class TopicServiceImpl implements TopicService {
     @Autowired private Indexer indexer;
     @Autowired private TopicDao topicDao;
 
@@ -75,18 +75,5 @@ public class TopicServiceImpl implements TopicService, CommandLineRunner {
     @Override
     public boolean topicExists(String topic) {
         return topicDao.exists(topic);
-    }
-
-    @Override
-    public void run(String... strings) throws Exception {
-        if (strings.length != 1) {
-            throw new InvalidConfigurationException("You must specify at least one (and exactly one) parameter which points to base_dir");
-        }
-        Path path = Paths.get(strings[0]);
-        if (!Files.exists(path) || !Files.isDirectory(path)) {
-            throw new InvalidConfigurationException("base_dir does not exist or it's not a directory.");
-        }
-        topicDao.clear();
-        indexer.setBaseDir(path.toAbsolutePath().toString());
     }
 }
