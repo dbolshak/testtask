@@ -1,5 +1,6 @@
-package com.dbolshak.testtask;
+package com.dbolshak.testtask.app;
 
+import com.dbolshak.testtask.app.BaseDirProvider;
 import org.springframework.stereotype.Component;
 
 @Component

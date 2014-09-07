@@ -24,7 +24,7 @@ public interface TopicService {
 
     LastRunningDto findLastRunningFor(String topic);
 
-    StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) throws ExecutionException, InterruptedException;
+    StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic);
 
-    LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) throws ExecutionException, InterruptedException;
+    LastRunningDetailsDto getLastRunningDetailsByTopic(String topic);
 }

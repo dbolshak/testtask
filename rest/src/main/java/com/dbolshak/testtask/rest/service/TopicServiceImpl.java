@@ -2,7 +2,6 @@ package com.dbolshak.testtask.rest.service;
 
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
-import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
@@ -18,8 +17,6 @@ import java.util.concurrent.ExecutionException;
  */
 @Service("topicService")
 public class TopicServiceImpl implements TopicService {
-    @Autowired
-    private Indexer indexer;
     @Autowired
     private TopicDao topicDao;
 
@@ -37,7 +34,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) throws ExecutionException, InterruptedException {
+    public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) {
         StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
         TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
         BigDecimal total = BigDecimal.ZERO;
@@ -62,7 +59,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) throws ExecutionException, InterruptedException {
+    public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) {
         LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
         TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
         detailsForLastRunning.setMessagesForPartition(timeStampContent.getContent());

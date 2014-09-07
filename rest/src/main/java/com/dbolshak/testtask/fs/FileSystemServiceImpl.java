@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.app.BaseDirProvider;
 import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     public String getLatestRunning(String topic) {
         File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + Helper.HISTORY_SUB_FOLDER);
         final String[] latestRunning = new String[]{""};
-        //noinspection ResultOfMethodCallIgnored we are most interested what we do in a filter, we don't care about actual list of files
+        //noinspection ResultOfMethodCallIgnored
         history.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String timeStamp) {

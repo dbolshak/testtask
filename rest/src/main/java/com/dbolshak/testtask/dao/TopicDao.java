@@ -47,7 +47,7 @@ public interface TopicDao {
      * @param timeStamp
      * @return
      */
-    TimeStampContent findTimeStampInfo(String topic, String timeStamp) throws ExecutionException, InterruptedException;
+    TimeStampContent findTimeStampInfo(String topic, String timeStamp);
 
     /**
      * Check that specified topic exists

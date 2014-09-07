@@ -49,7 +49,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public TimeStampContent findTimeStampInfo(String topic, String timeStamp) throws ExecutionException, InterruptedException {
+    public TimeStampContent findTimeStampInfo(String topic, String timeStamp) {
         return cacheService.get(topic, timeStamp);
     }
 

@@ -27,7 +27,7 @@ public interface CacheService {
      * @return
      * @throws InterruptedException
      */
-    TimeStampContent get(String file) throws InterruptedException, ExecutionException;
+    TimeStampContent get(String file);
 
-    TimeStampContent get(String topic, String timeStamp) throws InterruptedException, ExecutionException;
+    TimeStampContent get(String topic, String timeStamp);
 }

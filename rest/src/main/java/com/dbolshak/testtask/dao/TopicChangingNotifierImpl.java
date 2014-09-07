@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.dao;
 
-import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.app.BaseDirProvider;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.FileChangeEvent;
 import org.apache.commons.vfs2.FileListener;

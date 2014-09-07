@@ -3,7 +3,10 @@ package com.dbolshak.testtask.dao.cache;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
+import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,7 @@ import java.util.concurrent.FutureTask;
 
 @Component
 public class CacheServiceImpl implements Computable, CacheService {
+    private final static Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
     private final ConcurrentMap<String, Future<TimeStampContent>> cache =
             new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampContent>>().maximumWeightedCapacity(1_000_000).build();
 
@@ -26,7 +30,7 @@ public class CacheServiceImpl implements Computable, CacheService {
     private FileSystemService fileSystemService;
 
     @Override
-    public TimeStampContent compute(final String file) throws InterruptedException, ExecutionException {
+    public TimeStampContent compute(final String file) {
         while (true) {
             Future<TimeStampContent> f = cache.get(file);
             if (f == null) {
@@ -45,7 +49,10 @@ public class CacheServiceImpl implements Computable, CacheService {
             try {
                 return f.get();
             } catch (CancellationException e) {
+                LOG.warn ("Future was cancelled by exception, removing all cache for " + file, e);
                 cache.remove(file, f);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new ApplicationRuntimeException("Exception occurs in cache while handling " + file, e);
             }
         }
     }
@@ -61,12 +68,12 @@ public class CacheServiceImpl implements Computable, CacheService {
     }
 
     @Override
-    public TimeStampContent get(String file) throws InterruptedException, ExecutionException {
+    public TimeStampContent get(String file){
         return compute(file);
     }
 
     @Override
-    public TimeStampContent get(String topic, String timeStamp) throws InterruptedException, ExecutionException {
+    public TimeStampContent get(String topic, String timeStamp) {
         return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 }

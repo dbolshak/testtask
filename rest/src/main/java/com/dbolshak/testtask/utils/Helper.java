@@ -10,8 +10,8 @@ final public class Helper {
     public static final String HISTORY_SUB_FOLDER = FILE_SEPARATOR + "history";
 
     /// depends on #{Constants.DATE_FORMAT}
-    public static final String REG_EXP_DATE_PATTERN_STR = "([1-2][0-9]{3})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])-(0?[0-9]|[12][0-3])-([0-5][0-9])-([0-5][0-9])";
-    public static final Pattern TIME_STAMP_PATTERN = Pattern.compile(REG_EXP_DATE_PATTERN_STR);
+    private static final String REG_EXP_DATE_PATTERN_STR = "([1-2][0-9]{3})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])-(0?[0-9]|[12][0-3])-([0-5][0-9])-([0-5][0-9])";
+    private static final Pattern TIME_STAMP_PATTERN = Pattern.compile(REG_EXP_DATE_PATTERN_STR);
     public static final String OFFSETS_FILE_NAME = FILE_SEPARATOR + "offsets.csv";
 
     private Helper() {

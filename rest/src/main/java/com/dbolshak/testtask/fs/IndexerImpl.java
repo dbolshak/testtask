@@ -1,10 +1,9 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.app.BaseDirProvider;
 import com.dbolshak.testtask.dao.TopicChangingNotifier;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.utils.Helper;
-import org.apache.commons.vfs2.FileSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/**
- * Created by dbolshak on 04.09.2014.
- */
 @Service("indexer")
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
@@ -77,17 +73,6 @@ public class IndexerImpl implements Indexer {
             }
         }
         executor.shutdown();
-
-        new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
-            @Override
-            public void run() {
-                try {
-                    topicChangingNotifier.init();
-                } catch (FileSystemException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-            }
-        }).start();
 
         LOG.info("Indexing has finished");
     }

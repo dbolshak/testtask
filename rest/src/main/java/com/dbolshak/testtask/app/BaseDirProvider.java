@@ -1,4 +1,4 @@
-package com.dbolshak.testtask;
+package com.dbolshak.testtask.app;
 
 /**
  * Sets a base dir, so all classes who need information about baseDir can inject this bean
