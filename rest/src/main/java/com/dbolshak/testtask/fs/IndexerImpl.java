@@ -63,7 +63,7 @@ public class IndexerImpl implements Indexer {
                 @Override
                 public Map.Entry<String, String> call() throws Exception {
                     String topicStr = topic.getName();
-                    return new AbstractMap.SimpleEntry<String, String>(fileSystemService.getLatestRunning(topicStr), topicStr);
+                    return new AbstractMap.SimpleEntry<>(fileSystemService.getLatestRunning(topicStr), topicStr);
                 }
             });
             list.add(future);

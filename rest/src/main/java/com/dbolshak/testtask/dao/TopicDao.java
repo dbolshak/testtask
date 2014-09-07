@@ -55,5 +55,5 @@ public interface TopicDao {
      * @param topic
      * @return
      */
-    boolean exists(String topic);
+    boolean topicExists(String topic);
 }

@@ -54,7 +54,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public boolean exists(String topic) {
+    public boolean topicExists(String topic) {
         ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
         return timeStamps != null && !timeStamps.isEmpty();
     }

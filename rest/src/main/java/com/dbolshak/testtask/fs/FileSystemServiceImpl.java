@@ -19,6 +19,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     public String getLatestRunning(String topic) {
         File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + Helper.HISTORY_SUB_FOLDER);
         final String[] latestRunning = new String[]{""};
+        //noinspection ResultOfMethodCallIgnored we are most interested what we do in a filter, we don't care about actual list of files
         history.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String timeStamp) {

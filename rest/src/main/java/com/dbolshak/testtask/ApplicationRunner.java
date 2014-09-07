@@ -1,7 +1,7 @@
 package com.dbolshak.testtask;
 
 import com.dbolshak.testtask.fs.Indexer;
-import com.dbolshak.testtask.rest.exceptions.InvalidConfigurationException;
+import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
@@ -18,11 +18,11 @@ public class ApplicationRunner implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         if (strings.length != 1) {
-            throw new InvalidConfigurationException("You must specify at least one (and exactly one) parameter which points to base_dir");
+            throw new ApplicationRuntimeException("You must specify at least one (and exactly one) parameter which points to base_dir");
         }
         Path path = Paths.get(strings[0]);
         if (!Files.exists(path) || !Files.isDirectory(path)) {
-            throw new InvalidConfigurationException("base_dir does not exist or it's not a directory.");
+            throw new ApplicationRuntimeException("base_dir does not exist or it's not a directory.");
         }
 
         baseDirProvider.setBaseDir(path.toAbsolutePath().toString());

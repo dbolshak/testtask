@@ -71,6 +71,6 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public boolean topicExists(String topic) {
-        return topicDao.exists(topic);
+        return topicDao.topicExists(topic);
     }
 }

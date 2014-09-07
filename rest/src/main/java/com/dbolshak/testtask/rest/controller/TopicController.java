@@ -33,29 +33,29 @@ public class TopicController {
     @RequestMapping(value = "/lastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<LastRunningDto> getLastRunningByTopic(@PathVariable String topic) {
-        if (!topicService.topicExists(topic)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (topicService.topicExists(topic)) {
+            return new ResponseEntity(topicService.findLastRunningFor(topic), HttpStatus.OK);
         }
-        return new ResponseEntity(topicService.findLastRunningFor(topic), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/statisticsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
-        if (!topicService.topicExists(topic)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (topicService.topicExists(topic)) {
+            return new ResponseEntity(topicService.getStaticsForLastRunningByTopic(topic), HttpStatus.OK);
         }
 
-        return new ResponseEntity(topicService.getStaticsForLastRunningByTopic(topic), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/detailsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
-        if (!topicService.topicExists(topic)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (topicService.topicExists(topic)) {
+            return new ResponseEntity(topicService.getLastRunningDetailsByTopic(topic), HttpStatus.OK);
         }
 
-        return new ResponseEntity(topicService.getLastRunningDetailsByTopic(topic), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
