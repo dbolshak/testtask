@@ -1,22 +1,23 @@
-package com.dbolshak.testtask.app;
+package com.dbolshak.testtask;
 
+import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.dao.TopicChangingNotifier;
 import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
-import org.apache.commons.vfs2.FileSystemException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
-public class MyApplicationRunner implements CommandLineRunner {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplicationRunner.class);
+public class ApplicationRunner implements CommandLineRunner {
+    @Autowired
+    private ApplicationContext context;
     @Autowired
     private BaseDirProvider baseDirProvider;
     @Autowired
@@ -35,17 +36,17 @@ public class MyApplicationRunner implements CommandLineRunner {
         }
 
         baseDirProvider.setBaseDir(path.toAbsolutePath().toString());
-        //indexer.start();
+        runPostSetDirMethods();
+    }
 
-        new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
-            @Override
-            public void run() {
-                //try {
-                    //topicChangingNotifier.init();
-                //} catch (FileSystemException e) {
-                    //LOG.warn ("Listening to file system events based on VFS is failed becuase exception", e);
-                //}
+    private void runPostSetDirMethods() throws Exception {
+        for (String beanName : context.getBeanDefinitionNames()) {
+            Object bean = context.getBean(beanName);
+            for (Method method : bean.getClass().getMethods()) {
+                if (method.getAnnotation(PostSetDir.class) != null) {
+                    method.invoke(bean);
+                }
             }
-        }).start();
+        }
     }
 }

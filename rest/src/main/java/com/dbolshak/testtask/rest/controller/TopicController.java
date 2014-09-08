@@ -41,7 +41,7 @@ public class TopicController {
 
     @RequestMapping(value = "/statisticsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
+    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
             return new ResponseEntity(topicService.getStaticsForLastRunningByTopic(topic), HttpStatus.OK);
         }
@@ -51,7 +51,7 @@ public class TopicController {
 
     @RequestMapping(value = "/detailsForLastRunning/{topic}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) throws ExecutionException, InterruptedException {
+    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic)  {
         if (topicService.topicExists(topic)) {
             return new ResponseEntity(topicService.getLastRunningDetailsByTopic(topic), HttpStatus.OK);
         }

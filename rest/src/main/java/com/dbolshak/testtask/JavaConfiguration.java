@@ -1,4 +1,4 @@
-package com.dbolshak.testtask.app;
+package com.dbolshak.testtask;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

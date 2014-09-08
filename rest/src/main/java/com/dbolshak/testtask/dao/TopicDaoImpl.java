@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.ExecutionException;
 
 @Repository
 public class TopicDaoImpl implements TopicDao {
-    private final ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
+    private ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;
 
@@ -49,7 +48,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public TimeStampContent findTimeStampInfo(String topic, String timeStamp) {
+    public TimeStampInfo findTimeStampInfo(String topic, String timeStamp) {
         return cacheService.get(topic, timeStamp);
     }
 

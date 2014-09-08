@@ -3,13 +3,13 @@ package com.dbolshak.testtask.dao;
 import org.apache.commons.vfs2.FileSystemException;
 
 /**
- * This interface provides basic functionality for events propagating to their listeners
+ * This interface provides a basic API for working with listeners
  */
 public interface TopicChangingNotifier {
     /**
-     * initializes our notifier
+     * inits out notifier
      */
-    void init() throws FileSystemException;
+    void init();
 
     /**
      * Adds a listener, which will be notified about changes in baseDir

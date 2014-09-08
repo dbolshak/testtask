@@ -9,27 +9,25 @@ import org.springframework.stereotype.Component;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- * Created by dbolshak on 05.09.2014.
- */
 @Component("fileReader")
 public class CsvComputable implements Computable {
-    private final static Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
+
     @Override
-    public TimeStampContent compute(String file) {
+    public TimeStampInfo compute(String file)  {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            TimeStampContent timeStampContent = new TimeStampContent();
+            TimeStampInfo timeStampInfo = new TimeStampInfo();
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 try {
-                    timeStampContent.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
+                    timeStampInfo.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                    LOG.warn("Cannot handle " + nextLine + "from file " + file + " because of exception", e);
+                    LOG.warn("some problem with " + nextLine.toString() + " in file " + file, e);
                 }
             }
-            return timeStampContent;
+            return timeStampInfo;
         } catch (IOException e) {
-            throw new ApplicationRuntimeException("Cannot handle specified file " + file, e);
+            throw new ApplicationRuntimeException("Exception occurred in CsvComputable while handling " + file, e);
         }
     }
 }

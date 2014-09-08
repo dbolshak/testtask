@@ -19,7 +19,7 @@ public class TimeStampListener extends AbstractTopicChangingListener {
     @Override
     public void onTimeStampDeleted(String topic, String timeStamp) {
         topicDao.removeTimeStamp(timeStamp, topic);
-        //just in case if someone deleted the latest timestamp then we need to refresh it
+        //just in case if someone deleted the latest timestamp we need to refresh it
         topicDao.addTimeStamp(fileSystemService.getLatestRunning(topic), topic);
     }
 }

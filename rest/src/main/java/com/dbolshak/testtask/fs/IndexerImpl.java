@@ -1,13 +1,13 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.app.BaseDirProvider;
-import com.dbolshak.testtask.dao.TopicChangingNotifier;
+import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.utils.Helper;
+import org.apache.commons.vfs2.FileSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -19,13 +19,12 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
-@Component
+/**
+ * Created by dbolshak on 04.09.2014.
+ */
+@Service
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
 
@@ -38,14 +37,15 @@ public class IndexerImpl implements Indexer {
 
 
     @Override
-    public void start() {
+    @PostSetDir
+    public void index() {
         LOG.info(String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
 
         File root = new File(baseDirProvider.getBaseDir());
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
+                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });

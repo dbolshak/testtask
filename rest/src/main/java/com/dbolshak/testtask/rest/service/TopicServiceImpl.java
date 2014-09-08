@@ -1,7 +1,8 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.dao.TimeStampContent;
+import com.dbolshak.testtask.dao.TimeStampInfo;
 import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
@@ -15,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by dbolshak on 03.09.2014.
  */
-@Service("topicService")
+@Service
 public class TopicServiceImpl implements TopicService {
     @Autowired
     private TopicDao topicDao;
@@ -36,12 +37,12 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) {
         StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
         BigDecimal total = BigDecimal.ZERO;
-        if (!timeStampContent.getContent().isEmpty()) {
+        if (!timeStampInfo.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
             long max = Long.MIN_VALUE;
-            for (Long messageCount : timeStampContent.getContent().values()) {
+            for (Long messageCount : timeStampInfo.getContent().values()) {
                 if (min >= messageCount) {
                     min = messageCount;
                 }
@@ -52,7 +53,7 @@ public class TopicServiceImpl implements TopicService {
             }
             statisticsForLastRunningDto.setMin(min);
             statisticsForLastRunningDto.setMax(max);
-            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampContent.getContent().size())).doubleValue());
+            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampInfo.getContent().size())).doubleValue());
         }
         statisticsForLastRunningDto.setTotal(total);
         return statisticsForLastRunningDto;
@@ -61,8 +62,8 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) {
         LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
-        detailsForLastRunning.setMessagesForPartition(timeStampContent.getContent());
+        TimeStampInfo timeStampInfo = topicDao.findTimeStampInfo(topic, topicDao.findLastRunningFor(topic));
+        detailsForLastRunning.setMessagesForPartition(timeStampInfo.getContent());
         return detailsForLastRunning;
     }
 

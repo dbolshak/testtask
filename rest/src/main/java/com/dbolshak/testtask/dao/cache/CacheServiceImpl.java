@@ -1,45 +1,39 @@
 package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.dao.Computable;
-import com.dbolshak.testtask.dao.TimeStampContent;
+import com.dbolshak.testtask.dao.TimeStampInfo;
 import com.dbolshak.testtask.fs.FileSystemService;
 import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
-@Component
+@Service
 public class CacheServiceImpl implements Computable, CacheService {
-    private final static Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
-    private final ConcurrentMap<String, Future<TimeStampContent>> cache =
-            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampContent>>().maximumWeightedCapacity(1_000_000).build();
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
 
+    private final ConcurrentMap<String, Future<TimeStampInfo>> cache =
+            new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampInfo>>().maximumWeightedCapacity(1_000_000).build();
     @Autowired
     private Computable fileReader;
     @Autowired
     private FileSystemService fileSystemService;
 
     @Override
-    public TimeStampContent compute(final String file) {
+    public TimeStampInfo compute(final String file) {
         while (true) {
-            Future<TimeStampContent> f = cache.get(file);
+            Future<TimeStampInfo> f = cache.get(file);
             if (f == null) {
-                Callable<TimeStampContent> callable = new Callable<TimeStampContent>() {
-                    public TimeStampContent call() throws InterruptedException, IOException, ExecutionException {
+                Callable<TimeStampInfo> eval = new Callable<TimeStampInfo>() {
+                    public TimeStampInfo call() throws InterruptedException, IOException, ExecutionException {
                         return fileReader.compute(file);
                     }
                 };
-                FutureTask<TimeStampContent> ft = new FutureTask<>(callable);
+                FutureTask<TimeStampInfo> ft = new FutureTask<>(eval);
                 f = cache.putIfAbsent(file, ft);
                 if (f == null) {
                     f = ft;
@@ -49,10 +43,10 @@ public class CacheServiceImpl implements Computable, CacheService {
             try {
                 return f.get();
             } catch (CancellationException e) {
-                LOG.warn ("Future was cancelled by exception, removing all cache for " + file, e);
+                LOG.warn("Compute task is cancelled by exception for file " + file, e);
                 cache.remove(file, f);
             } catch (InterruptedException | ExecutionException e) {
-                throw new ApplicationRuntimeException("Exception occurs in cache while handling " + file, e);
+                throw new ApplicationRuntimeException("Unknown exception occurred while handling content in cache for file " + file, e);
             }
         }
     }
@@ -64,16 +58,16 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public void remove(String topic, String timeStamp) {
-        remove(fileSystemService.getAbsoluteFileName(topic, timeStamp));
+        remove(fileSystemService.getAbsolutFileName(topic, timeStamp));
     }
 
     @Override
-    public TimeStampContent get(String file){
+    public TimeStampInfo get(String file) {
         return compute(file);
     }
 
     @Override
-    public TimeStampContent get(String topic, String timeStamp) {
-        return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
+    public TimeStampInfo get(String topic, String timeStamp)  {
+        return get(fileSystemService.getAbsolutFileName(topic, timeStamp));
     }
 }
