@@ -26,12 +26,6 @@ final public class Helper {
         if (paths.length < 4) {
             return false;
         }
-        if (!paths[paths.length - 1].equals(Helper.OFFSETS_FILE_NAME)) {
-            return false;
-        }
-        if (!paths[paths.length - 3].equals(Helper.HISTORY_SUB_FOLDER)) {
-            return false;
-        }
-        return Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - 2]).groupCount() == 6;
+        return paths[paths.length - 1].equals(Helper.OFFSETS_FILE_NAME) && paths[paths.length - 3].equals(Helper.HISTORY_SUB_FOLDER) && Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - 2]).groupCount() == 6;
     }
 }

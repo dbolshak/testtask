@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component("fileReader")
 public class CsvComputable implements Computable {
@@ -22,7 +23,7 @@ public class CsvComputable implements Computable {
                 try {
                     timeStampContent.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                    LOG.warn("some problem with " + nextLine.toString() + " in file " + file, e);
+                    LOG.warn("some problem with " + Arrays.toString(nextLine) + " in file " + file, e);
                 }
             }
             return timeStampContent;
