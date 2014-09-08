@@ -2,8 +2,6 @@ package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.dao.TimeStampInfo;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * Created by dbolshak on 05.09.2014.
  */

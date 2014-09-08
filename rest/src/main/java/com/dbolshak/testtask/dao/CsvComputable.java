@@ -14,7 +14,7 @@ public class CsvComputable implements Computable {
     private static final Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
 
     @Override
-    public TimeStampInfo compute(String file)  {
+    public TimeStampInfo compute(String file) {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             TimeStampInfo timeStampInfo = new TimeStampInfo();
             String[] nextLine;

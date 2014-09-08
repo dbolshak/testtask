@@ -1,16 +1,13 @@
 package com.dbolshak.testtask.dao;
 
 import com.dbolshak.testtask.dao.cache.CacheService;
-import com.dbolshak.testtask.rest.service.TopicService;
-import com.dbolshak.testtask.rest.service.TopicServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class TopicDaoImplTest {

@@ -6,11 +6,10 @@ import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
-import org.mockito.Mock;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;

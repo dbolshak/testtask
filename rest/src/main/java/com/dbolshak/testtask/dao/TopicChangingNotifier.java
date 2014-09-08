@@ -1,7 +1,5 @@
 package com.dbolshak.testtask.dao;
 
-import org.apache.commons.vfs2.FileSystemException;
-
 /**
  * This interface provides a basic API for working with listeners
  */

@@ -42,7 +42,10 @@ public class TopicControllerTest {
     @Test
     public void testGetExistingTopics() throws Exception {
         ExistingTopicsDto existingTopicsDto = new ExistingTopicsDto();
-        existingTopicsDto.setExistingTopics(new ArrayList<String>(){{add("topic-1");add("topic-2");}});
+        existingTopicsDto.setExistingTopics(new ArrayList<String>() {{
+            add("topic-1");
+            add("topic-2");
+        }});
         when(topicService.getAllExistingTopics()).thenReturn(existingTopicsDto);
 
         ResultActions resultActions = this.mockMvc.perform(

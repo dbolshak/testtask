@@ -67,7 +67,7 @@ public class CacheServiceImpl implements Computable, CacheService {
     }
 
     @Override
-    public TimeStampInfo get(String topic, String timeStamp)  {
+    public TimeStampInfo get(String topic, String timeStamp) {
         return get(fileSystemService.getAbsolutFileName(topic, timeStamp));
     }
 }

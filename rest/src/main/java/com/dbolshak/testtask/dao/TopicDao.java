@@ -1,7 +1,6 @@
 package com.dbolshak.testtask.dao;
 
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 public interface TopicDao {
     /**

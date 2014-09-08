@@ -1,7 +1,5 @@
 package com.dbolshak.testtask.fs;
 
-import org.apache.commons.vfs2.FileSystemException;
-
 /**
  * This interface provides functionality to index a base_dir.
  */

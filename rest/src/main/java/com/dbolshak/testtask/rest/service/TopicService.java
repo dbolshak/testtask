@@ -5,8 +5,6 @@ import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * Created by dbolshak on 03.09.2014.
  */

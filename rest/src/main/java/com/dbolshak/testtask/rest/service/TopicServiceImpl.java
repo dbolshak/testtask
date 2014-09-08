@@ -2,7 +2,6 @@ package com.dbolshak.testtask.rest.service;
 
 import com.dbolshak.testtask.dao.TimeStampInfo;
 import com.dbolshak.testtask.dao.TopicDao;
-import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDto;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by dbolshak on 03.09.2014.
