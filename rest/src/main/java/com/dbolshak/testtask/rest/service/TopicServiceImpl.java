@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-/**
- * Created by dbolshak on 03.09.2014.
- */
 @Service
 public class TopicServiceImpl implements TopicService {
     @Autowired

@@ -6,7 +6,7 @@ import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 
 /**
- * Created by dbolshak on 03.09.2014.
+ * A middle layer service which must separate presentation and business logic.
  */
 public interface TopicService {
     /**

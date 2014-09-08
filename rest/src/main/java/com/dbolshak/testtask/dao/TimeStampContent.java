@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * Created by dbolshak on 05.09.2014.
+ * A Pojo which wraps CSV file content to convenient structure.
  */
 public class TimeStampContent {
     private final Map<Integer, Long> partitionToMessageCount = new ConcurrentSkipListMap<>();

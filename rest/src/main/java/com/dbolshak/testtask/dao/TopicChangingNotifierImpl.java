@@ -75,7 +75,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
     }
 
     @Override
-    public void deleteListener(TopicChangingListener topicChangingListener) {
+    public void removeListener(TopicChangingListener topicChangingListener) {
         listeners.remove(topicChangingListener);
     }
 }

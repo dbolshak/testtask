@@ -3,7 +3,7 @@ package com.dbolshak.testtask.rest.dto;
 import java.util.Map;
 
 /**
- * Created by dbolshak on 03.09.2014.
+ * Simple DTO object which is a middle layer object between frontend (JSON) and backend (POJO)
  */
 public class LastRunningDetailsDto {
     private final String topic;

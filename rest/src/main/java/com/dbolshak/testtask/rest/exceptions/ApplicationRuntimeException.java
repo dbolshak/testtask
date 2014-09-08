@@ -1,7 +1,7 @@
 package com.dbolshak.testtask.rest.exceptions;
 
 /**
- * Created by dbolshak on 03.09.2014.
+ * Our application wraps all exceptions to this one.
  */
 public class ApplicationRuntimeException extends RuntimeException {
     public ApplicationRuntimeException(String message) {

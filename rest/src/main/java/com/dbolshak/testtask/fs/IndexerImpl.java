@@ -20,9 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-/**
- * Created by dbolshak on 04.09.2014.
- */
 @Service
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
@@ -44,7 +41,7 @@ public class IndexerImpl implements Indexer {
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUBFOLDER);
+                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });

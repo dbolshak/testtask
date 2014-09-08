@@ -31,7 +31,7 @@ public class CacheServiceImplTest {
         String topic = "topic";
         String fullPath = topic + timeStamp;
 
-        when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
+        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);
@@ -44,7 +44,7 @@ public class CacheServiceImplTest {
         assertEquals(timeStampContent, service.get(topic, timeStamp));
         verifyZeroInteractions(fileReader);
 
-        when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
+        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
         service.remove(topic, timeStamp);
         service.get(topic, timeStamp);
         verify(fileReader, atLeast(2)).compute(fullPath);//init cache again
@@ -71,7 +71,7 @@ public class CacheServiceImplTest {
         String topic = "topic";
         String fullPath = topic + timeStamp;
 
-        when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
+        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);

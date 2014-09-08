@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by dbolshak on 03.09.2014.
+ * Controller for our RESTFull service
  */
 @Controller
 public class TopicController {

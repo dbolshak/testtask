@@ -2,6 +2,9 @@ package com.dbolshak.testtask.rest.dto;
 
 import java.math.BigDecimal;
 
+/**
+ * Simple DTO object which is a middle layer object between frontend (JSON) and backend (POJO)
+ */
 public class StatisticsForLastRunningDto {
     private final String topic;
     private BigDecimal total;

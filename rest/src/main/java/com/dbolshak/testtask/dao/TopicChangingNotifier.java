@@ -5,7 +5,7 @@ package com.dbolshak.testtask.dao;
  */
 public interface TopicChangingNotifier {
     /**
-     * inits out notifier
+     * initializes out notifier
      */
     void init();
 
@@ -21,5 +21,5 @@ public interface TopicChangingNotifier {
      *
      * @param topicChangingListener
      */
-    void deleteListener(TopicChangingListener topicChangingListener);
+    void removeListener(TopicChangingListener topicChangingListener);
 }

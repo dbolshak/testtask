@@ -1,8 +1,14 @@
 package com.dbolshak.testtask.dao;
 
 /**
- * Created by dbolshak on 05.09.2014.
+ * A basic interface which can provide content from specified file.
  */
 public interface Computable {
+    /**
+     * Parses specified file and returns content.
+     *
+     * @param file file for which we need to get content
+     * @return content of specified file.
+     */
     TimeStampContent compute(String file);
 }

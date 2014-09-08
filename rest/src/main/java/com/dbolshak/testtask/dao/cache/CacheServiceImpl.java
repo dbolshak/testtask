@@ -28,12 +28,12 @@ public class CacheServiceImpl implements Computable, CacheService {
         while (true) {
             Future<TimeStampContent> f = cache.get(file);
             if (f == null) {
-                Callable<TimeStampContent> eval = new Callable<TimeStampContent>() {
+                Callable<TimeStampContent> callable = new Callable<TimeStampContent>() {
                     public TimeStampContent call() throws InterruptedException, IOException, ExecutionException {
                         return fileReader.compute(file);
                     }
                 };
-                FutureTask<TimeStampContent> ft = new FutureTask<>(eval);
+                FutureTask<TimeStampContent> ft = new FutureTask<>(callable);
                 f = cache.putIfAbsent(file, ft);
                 if (f == null) {
                     f = ft;
@@ -58,7 +58,7 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public void remove(String topic, String timeStamp) {
-        remove(fileSystemService.getAbsolutFileName(topic, timeStamp));
+        remove(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 
     @Override
@@ -68,6 +68,6 @@ public class CacheServiceImpl implements Computable, CacheService {
 
     @Override
     public TimeStampContent get(String topic, String timeStamp) {
-        return get(fileSystemService.getAbsolutFileName(topic, timeStamp));
+        return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
     }
 }

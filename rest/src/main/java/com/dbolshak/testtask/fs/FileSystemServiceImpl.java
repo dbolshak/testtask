@@ -15,7 +15,7 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     @Override
     public String getLatestRunning(String topic) {
-        File history = new File(baseDirProvider.getBaseDir() + Helper.FILE_SEPARATOR + topic + Helper.HISTORY_SUBFOLDER);
+        File history = new File(baseDirProvider.getBaseDir() + Helper.FILE_SEPARATOR + topic + Helper.HISTORY_SUB_FOLDER);
         final String[] latestRunning = new String[]{""};
         history.listFiles(new FilenameFilter() {
             @Override
@@ -30,7 +30,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     @Override
-    public String getAbsolutFileName(String topic, String timeStamp) {
+    public String getAbsoluteFileName(String topic, String timeStamp) {
         return Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp);
     }
 }
