@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
+import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
+
 @Service
 public class IndexerImpl implements Indexer {
     private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
@@ -41,7 +43,7 @@ public class IndexerImpl implements Indexer {
         File[] topics = root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + Helper.FILE_SEPARATOR + name + Helper.FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
+                Path pattern = Paths.get(dir.getAbsolutePath() + FILE_SEPARATOR + name + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });

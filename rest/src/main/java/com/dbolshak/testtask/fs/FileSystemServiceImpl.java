@@ -5,6 +5,8 @@ import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
+
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -15,7 +17,7 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     @Override
     public String getLatestRunning(String topic) {
-        File history = new File(baseDirProvider.getBaseDir() + Helper.FILE_SEPARATOR + topic + Helper.HISTORY_SUB_FOLDER);
+        File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
         final String[] latestRunning = new String[]{""};
         history.listFiles(new FilenameFilter() {
             @Override
