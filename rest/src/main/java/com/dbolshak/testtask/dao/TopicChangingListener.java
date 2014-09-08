@@ -3,7 +3,7 @@ package com.dbolshak.testtask.dao;
 /**
  * If you want to handle file system changes please implement this interface and register your instance.
  */
-public interface TopicChangingListener {
+interface TopicChangingListener {
     /**
      * Callback to handle adding a new file
      *

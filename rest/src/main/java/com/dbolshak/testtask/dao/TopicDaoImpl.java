@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 @Repository
 public class TopicDaoImpl implements TopicDao {
-    private ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
+    private final ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;
 
