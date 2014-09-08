@@ -14,18 +14,18 @@ public class CsvComputable implements Computable {
     private static final Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
 
     @Override
-    public TimeStampInfo compute(String file) {
+    public TimeStampContent compute(String file) {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            TimeStampInfo timeStampInfo = new TimeStampInfo();
+            TimeStampContent timeStampContent = new TimeStampContent();
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 try {
-                    timeStampInfo.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
+                    timeStampContent.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
                     LOG.warn("some problem with " + nextLine.toString() + " in file " + file, e);
                 }
             }
-            return timeStampInfo;
+            return timeStampContent;
         } catch (IOException e) {
             throw new ApplicationRuntimeException("Exception occurred in CsvComputable while handling " + file, e);
         }

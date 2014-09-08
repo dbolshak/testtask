@@ -81,20 +81,20 @@ public class TopicDaoImplTest {
     }
 
     @Test
-    public void testFindTimeStampInfo() throws Exception {
+    public void testFindTimeStampContent() throws Exception {
         String topic = "topic1";
         String timeStamp2 = "1984-19-12-00-00-00";
         String timeStamp1 = "1984-19-12-00-00-01";
         service.addTimeStamp(timeStamp1, topic);
         service.addTimeStamp(timeStamp2, topic);
 
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
 
-        when(cacheService.get(topic, timeStamp1)).thenReturn(timeStampInfo);
+        when(cacheService.get(topic, timeStamp1)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampInfo, service.findTimeStampInfo(topic, service.findLastRunningFor(topic)));
+        assertEquals(timeStampContent, service.findTimeStampContent(topic, service.findLastRunningFor(topic)));
     }
 
     @Test

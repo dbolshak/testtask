@@ -48,7 +48,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public TimeStampInfo findTimeStampInfo(String topic, String timeStamp) {
+    public TimeStampContent findTimeStampContent(String topic, String timeStamp) {
         return cacheService.get(topic, timeStamp);
     }
 

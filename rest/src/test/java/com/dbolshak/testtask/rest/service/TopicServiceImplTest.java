@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
@@ -57,11 +57,11 @@ public class TopicServiceImplTest {
     public void testGetStaticsForLastRunningByTopic() throws Exception {
         String topic1 = "topic-1";
         String timeStamp = "1984-19-12-00-00-00";
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
         when(topicDao.findLastRunningFor(topic1)).thenReturn(timeStamp);
-        when(topicDao.findTimeStampInfo(topic1, timeStamp)).thenReturn(timeStampInfo);
+        when(topicDao.findTimeStampContent(topic1, timeStamp)).thenReturn(timeStampContent);
         StatisticsForLastRunningDto statisticsForLastRunningDto = service.getStaticsForLastRunningByTopic(topic1);
 
         assertEquals(1l, statisticsForLastRunningDto.getMin());
@@ -73,12 +73,12 @@ public class TopicServiceImplTest {
     public void testGetLastRunningDetailsByTopic() throws Exception {
         String topic1 = "topic-1";
         String timeStamp = "1984-19-12-00-00-00";
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
 
         when(topicDao.findLastRunningFor(topic1)).thenReturn(timeStamp);
-        when(topicDao.findTimeStampInfo(topic1, timeStamp)).thenReturn(timeStampInfo);
+        when(topicDao.findTimeStampContent(topic1, timeStamp)).thenReturn(timeStampContent);
         LastRunningDetailsDto lastRunningDetailsDto = service.getLastRunningDetailsByTopic(topic1);
 
         assertEquals(2, lastRunningDetailsDto.getMessagesForPartition().size());

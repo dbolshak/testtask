@@ -1,7 +1,7 @@
 package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.dao.Computable;
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,15 +33,15 @@ public class CacheServiceImplTest {
 
         when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
 
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
-        when(fileReader.compute(fullPath)).thenReturn(timeStampInfo);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
+        when(fileReader.compute(fullPath)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampInfo, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(topic, timeStamp));
         verify(fileReader).compute(fullPath);
 
-        assertEquals(timeStampInfo, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(topic, timeStamp));
         verifyZeroInteractions(fileReader);
 
         when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
@@ -53,15 +53,15 @@ public class CacheServiceImplTest {
     @Test
     public void testGet() throws Exception {
         String fileName = "some csv file";
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
 
-        when(fileReader.compute(fileName)).thenReturn(timeStampInfo);
-        assertEquals(timeStampInfo, service.get(fileName));
+        when(fileReader.compute(fileName)).thenReturn(timeStampContent);
+        assertEquals(timeStampContent, service.get(fileName));
         verify(fileReader).compute(fileName);
 
-        assertEquals(timeStampInfo, service.get(fileName));
+        assertEquals(timeStampContent, service.get(fileName));
         verifyZeroInteractions(fileReader);
     }
 
@@ -73,12 +73,12 @@ public class CacheServiceImplTest {
 
         when(fileSystemService.getAbsolutFileName(topic, timeStamp)).thenReturn(fullPath);
 
-        TimeStampInfo timeStampInfo = new TimeStampInfo();
-        timeStampInfo.put(1, 1l);
-        timeStampInfo.put(2, 3l);
-        when(fileReader.compute(fullPath)).thenReturn(timeStampInfo);
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
+        when(fileReader.compute(fullPath)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampInfo, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(topic, timeStamp));
         verify(fileReader).compute(fullPath);
     }
 }

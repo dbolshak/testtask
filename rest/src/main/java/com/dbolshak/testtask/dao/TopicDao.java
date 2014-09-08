@@ -46,7 +46,7 @@ public interface TopicDao {
      * @param timeStamp
      * @return
      */
-    TimeStampInfo findTimeStampInfo(String topic, String timeStamp);
+    TimeStampContent findTimeStampContent(String topic, String timeStamp);
 
     /**
      * Check that specified topic exists

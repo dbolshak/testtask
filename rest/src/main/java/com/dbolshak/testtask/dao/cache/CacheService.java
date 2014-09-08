@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.dao.TimeStampInfo;
+import com.dbolshak.testtask.dao.TimeStampContent;
 
 /**
  * Provides a basic API to get cached content or remove it.
@@ -27,7 +27,7 @@ public interface CacheService {
      * @param file absolute file name for which we want to get content from cache.
      * @return content of specified file.
      */
-    TimeStampInfo get(String file);
+    TimeStampContent get(String file);
 
     /**
      * Returns value from cache. In case of cache missing it loads it to cache.
@@ -36,5 +36,5 @@ public interface CacheService {
      * @param timeStamp timeStamp for which we want to get content.
      * @return content of specified file.
      */
-    TimeStampInfo get(String topic, String timeStamp);
+    TimeStampContent get(String topic, String timeStamp);
 }
