@@ -12,7 +12,7 @@ public interface BaseDirProvider {
     /**
      * Sets a baseDir which is provided during application bootstrap
      *
-     * @param baseDir
+     * @param baseDir a folder where topics are located, could be provided by absolute or relative path.
      */
     void setBaseDir(String baseDir);
 }
