@@ -3,9 +3,9 @@ package com.dbolshak.testtask.rest.service;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDto;
-import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunDto;
+import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +23,16 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public LastRunningDto findLastRunningFor(String topic) {
-        LastRunningDto lastRunningDto = new LastRunningDto(topic);
-        lastRunningDto.setLastRunning(topicDao.findLastRunningFor(topic));
-        return lastRunningDto;
+    public LastRunDto findLastRunFor(String topic) {
+        LastRunDto lastRunDto = new LastRunDto(topic);
+        lastRunDto.setLastRun(topicDao.findLastRun(topic));
+        return lastRunDto;
     }
 
     @Override
-    public StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic) {
-        StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRunningFor(topic));
+    public LastRunStatsDto getLastRunStats(String topic) {
+        LastRunStatsDto lastRunStatsDto = new LastRunStatsDto(topic);
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRun(topic));
         BigDecimal total = BigDecimal.ZERO;
         if (!timeStampContent.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
@@ -46,20 +46,20 @@ public class TopicServiceImpl implements TopicService {
                 }
                 total = total.add(BigDecimal.valueOf(messageCount));
             }
-            statisticsForLastRunningDto.setMin(min);
-            statisticsForLastRunningDto.setMax(max);
-            statisticsForLastRunningDto.setAverage(total.divide(BigDecimal.valueOf(timeStampContent.getContent().size())).doubleValue());
+            lastRunStatsDto.setMin(min);
+            lastRunStatsDto.setMax(max);
+            lastRunStatsDto.setAverage(total.divide(BigDecimal.valueOf(timeStampContent.getContent().size())).doubleValue());
         }
-        statisticsForLastRunningDto.setTotal(total);
-        return statisticsForLastRunningDto;
+        lastRunStatsDto.setTotal(total);
+        return lastRunStatsDto;
     }
 
     @Override
-    public LastRunningDetailsDto getLastRunningDetailsByTopic(String topic) {
-        LastRunningDetailsDto detailsForLastRunning = new LastRunningDetailsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRunningFor(topic));
-        detailsForLastRunning.setMessagesForPartition(timeStampContent.getContent());
-        return detailsForLastRunning;
+    public LastRunDetailsDto getLastRunDetails(String topic) {
+        LastRunDetailsDto lastRunDetailsDto = new LastRunDetailsDto(topic);
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRun(topic));
+        lastRunDetailsDto.setMessagesForPartition(timeStampContent.getContent());
+        return lastRunDetailsDto;
     }
 
     @Override

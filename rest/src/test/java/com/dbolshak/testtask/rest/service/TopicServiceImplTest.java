@@ -3,9 +3,9 @@ package com.dbolshak.testtask.rest.service;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDto;
-import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunDto;
+import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,7 @@ public class TopicServiceImplTest {
 
         when(topicDao.findAllTopics()).thenReturn(ALL_TOPICS);
         when(topicDao.topicExists(LAST_TOPIC)).thenReturn(true);
-        when(topicDao.findLastRunningFor(LAST_TOPIC)).thenReturn(TIME_STAMP_OF_LAST_TOPIC);
+        when(topicDao.findLastRun(LAST_TOPIC)).thenReturn(TIME_STAMP_OF_LAST_TOPIC);
         when(topicDao.findTimeStampContent(LAST_TOPIC, TIME_STAMP_OF_LAST_TOPIC)).thenReturn(timeStampContent);
     }
 
@@ -52,26 +52,26 @@ public class TopicServiceImplTest {
     }
 
     @Test
-    public void testFindLastRunningFor() throws Exception {
-        LastRunningDto lastRunningDto = service.findLastRunningFor(LAST_TOPIC);
+    public void testFindLastRun() throws Exception {
+        LastRunDto lastRunDto = service.findLastRunFor(LAST_TOPIC);
 
-        assertEquals(TIME_STAMP_OF_LAST_TOPIC, lastRunningDto.getLastRunning());
+        assertEquals(TIME_STAMP_OF_LAST_TOPIC, lastRunDto.getLastRun());
     }
 
     @Test
-    public void testGetStaticsForLastRunningByTopic() throws Exception {
-        StatisticsForLastRunningDto statisticsForLastRunningDto = service.getStaticsForLastRunningByTopic(LAST_TOPIC);
+    public void testGetLastRunStats() throws Exception {
+        LastRunStatsDto lastRunStatsDto = service.getLastRunStats(LAST_TOPIC);
 
-        assertEquals(1l, statisticsForLastRunningDto.getMin());
-        assertEquals(3l, statisticsForLastRunningDto.getMax());
-        assertEquals(BigDecimal.valueOf(4), statisticsForLastRunningDto.getTotal());
+        assertEquals(1l, lastRunStatsDto.getMin());
+        assertEquals(3l, lastRunStatsDto.getMax());
+        assertEquals(BigDecimal.valueOf(4), lastRunStatsDto.getTotal());
     }
 
     @Test
-    public void testGetLastRunningDetailsByTopic() throws Exception {
-        LastRunningDetailsDto lastRunningDetailsDto = service.getLastRunningDetailsByTopic(LAST_TOPIC);
+    public void testGetLastRunDetails() throws Exception {
+        LastRunDetailsDto lastRunDetailsDto = service.getLastRunDetails(LAST_TOPIC);
 
-        assertEquals(2, lastRunningDetailsDto.getMessagesForPartition().size());
+        assertEquals(2, lastRunDetailsDto.getMessagesForPartition().size());
     }
 
     @Test

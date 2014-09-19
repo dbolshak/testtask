@@ -39,7 +39,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public String findLastRunningFor(String topic) {
+    public String findLastRun(String topic) {
         ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
         if (timeStamps != null && !timeStamps.isEmpty()) {
             return timeStamps.last();
@@ -59,8 +59,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     private ConcurrentSkipListSet<String> findOrCreate(String topic) {
-        ConcurrentSkipListSet<String> running = new ConcurrentSkipListSet<>();
-        storage.putIfAbsent(topic, running);
+        storage.putIfAbsent(topic, new ConcurrentSkipListSet<String>());
         return storage.get(topic);
     }
 }

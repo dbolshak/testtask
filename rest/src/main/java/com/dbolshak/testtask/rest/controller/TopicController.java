@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.rest.controller;
 
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDto;
-import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunDto;
+import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import com.dbolshak.testtask.rest.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,18 +31,18 @@ public class TopicController {
 
     @RequestMapping(value = "/{topic}/lastRun", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<LastRunningDto> getLastRunningByTopic(@PathVariable String topic) {
+    public ResponseEntity<LastRunDto> getLastRun(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
-            return new ResponseEntity(topicService.findLastRunningFor(topic), HttpStatus.OK);
+            return new ResponseEntity(topicService.findLastRunFor(topic), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/{topic}/lastRun/stats", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) {
+    public ResponseEntity<LastRunStatsDto> getLastRunStats(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
-            return new ResponseEntity(topicService.getStaticsForLastRunningByTopic(topic), HttpStatus.OK);
+            return new ResponseEntity(topicService.getLastRunStats(topic), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,9 +50,9 @@ public class TopicController {
 
     @RequestMapping(value = "/{topic}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) {
+    public ResponseEntity<LastRunDetailsDto> getLastRunDetails(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
-            return new ResponseEntity(topicService.getLastRunningDetailsByTopic(topic), HttpStatus.OK);
+            return new ResponseEntity(topicService.getLastRunDetails(topic), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

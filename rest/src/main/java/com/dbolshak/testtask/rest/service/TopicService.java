@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.rest.service;
 
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDto;
-import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunDto;
+import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 
 /**
  * A middle layer service which must separate presentation and business logic.
@@ -20,9 +20,9 @@ public interface TopicService {
      */
     ExistingTopicsDto getAllExistingTopics();
 
-    LastRunningDto findLastRunningFor(String topic);
+    LastRunDto findLastRunFor(String topic);
 
-    StatisticsForLastRunningDto getStaticsForLastRunningByTopic(String topic);
+    LastRunStatsDto getLastRunStats(String topic);
 
-    LastRunningDetailsDto getLastRunningDetailsByTopic(String topic);
+    LastRunDetailsDto getLastRunDetails(String topic);
 }

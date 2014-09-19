@@ -32,12 +32,12 @@ public interface TopicDao {
     void addTimeStamp(String timeStamp, String topic);
 
     /**
-     * Returns time stamp of the latest running for specified topic
+     * Returns time stamp of the last run for specified topic
      *
      * @param topic a topic for what the latest time stamp must be returned
      * @return the latest timestamp as ("1984-12-19-00-00-00") or empty string if specified topic does not have timestamps
      */
-    String findLastRunningFor(String topic);
+    String findLastRun(String topic);
 
     /**
      * Returns all information about specified topic and timestamp or null if not found.

@@ -20,6 +20,6 @@ public class TimeStampListener extends AbstractTopicChangingListener {
     public void onTimeStampDeleted(String topic, String timeStamp) {
         topicDao.removeTimeStamp(timeStamp, topic);
         //just in case if someone deleted the latest timestamp we need to refresh it
-        topicDao.addTimeStamp(fileSystemService.getLatestRunning(topic), topic);
+        topicDao.addTimeStamp(fileSystemService.getLastRun(topic), topic);
     }
 }

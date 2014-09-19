@@ -5,12 +5,12 @@ package com.dbolshak.testtask.fs;
  */
 public interface FileSystemService {
     /**
-     * Returns the latest timestamp of topic running
+     * Returns the last timestamp of topic run
      *
-     * @param topic a topic for which we want to find the latest timestamp of running
+     * @param topic a topic for which we want to find the last timestamp of run
      * @return A string like "1984-12-19-00-00-00" or empty string if there is no timestamps at all
      */
-    String getLatestRunning(String topic);
+    String getLastRun(String topic);
 
     /**
      * Returns a absolute file name where information about timestamp for specified topic could be found.

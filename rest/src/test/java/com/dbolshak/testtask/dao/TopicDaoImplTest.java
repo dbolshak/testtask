@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -69,13 +68,13 @@ public class TopicDaoImplTest {
         /*
          * Make sure that we have LAST_RUN timestamp for topic TOPIC
          */
-        assertEquals(LAST_RUN, service.findLastRunningFor(TOPIC));
+        assertEquals(LAST_RUN, service.findLastRun(TOPIC));
 
         /*
          * Lets remove our known timestamp LAST_RUN for topic TOPIC and check that there is no any more this timestamp
          */
         service.removeTimeStamp(LAST_RUN, TOPIC);
-        assertEquals("", service.findLastRunningFor(TOPIC));
+        assertEquals("", service.findLastRun(TOPIC));
     }
 
     @Test
@@ -95,12 +94,12 @@ public class TopicDaoImplTest {
     }
 
     @Test
-    public void testFindLastRunningFor() throws Exception {
+    public void testFindLastRun() throws Exception {
         /*
          * Lets add some non last time stamp and make sure that even in this case we will return the latest one
          */
         service.addTimeStamp(NOT_LAST_RUN, TOPIC);
-        assertEquals(LAST_RUN, service.findLastRunningFor(TOPIC));
+        assertEquals(LAST_RUN, service.findLastRun(TOPIC));
     }
 
     @Test
@@ -113,7 +112,7 @@ public class TopicDaoImplTest {
 
         when(cacheService.get(TOPIC, LAST_RUN)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampContent, service.findTimeStampContent(TOPIC, service.findLastRunningFor(TOPIC)));
+        assertEquals(timeStampContent, service.findTimeStampContent(TOPIC, service.findLastRun(TOPIC)));
     }
 
     @Test

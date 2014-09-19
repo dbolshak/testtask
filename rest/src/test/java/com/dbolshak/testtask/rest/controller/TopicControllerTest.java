@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.rest.controller;
 
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDetailsDto;
-import com.dbolshak.testtask.rest.dto.LastRunningDto;
-import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
+import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
+import com.dbolshak.testtask.rest.dto.LastRunDto;
+import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import com.dbolshak.testtask.rest.service.TopicService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,23 +49,23 @@ public class TopicControllerTest {
 
         when(topicService.topicExists(TOPIC)).thenReturn(true);
 
-        LastRunningDto lastRunningDto = new LastRunningDto(TOPIC);
-        lastRunningDto.setLastRunning(LAST_RUN);
-        when(topicService.findLastRunningFor(TOPIC)).thenReturn(lastRunningDto);
+        LastRunDto lastRunDto = new LastRunDto(TOPIC);
+        lastRunDto.setLastRun(LAST_RUN);
+        when(topicService.findLastRunFor(TOPIC)).thenReturn(lastRunDto);
 
         ExistingTopicsDto existingTopicsDto = new ExistingTopicsDto();
         existingTopicsDto.setExistingTopics(ALL_TOPICS);
         when(topicService.getAllExistingTopics()).thenReturn(existingTopicsDto);
 
-        StatisticsForLastRunningDto statisticsForLastRunningDto = new StatisticsForLastRunningDto(TOPIC);
-        when(topicService.getStaticsForLastRunningByTopic(TOPIC)).thenReturn(statisticsForLastRunningDto);
+        LastRunStatsDto lastRunStatsDto = new LastRunStatsDto(TOPIC);
+        when(topicService.getLastRunStats(TOPIC)).thenReturn(lastRunStatsDto);
 
-        LastRunningDetailsDto lastRunningDetailsDto = new LastRunningDetailsDto(TOPIC);
+        LastRunDetailsDto lastRunDetailsDto = new LastRunDetailsDto(TOPIC);
         Map<Integer, Long> map = new HashMap<>();
         map.put(1, 2l);
         map.put(2, 4l);
-        lastRunningDetailsDto.setMessagesForPartition(map);
-        when(topicService.getLastRunningDetailsByTopic(TOPIC)).thenReturn(lastRunningDetailsDto);
+        lastRunDetailsDto.setMessagesForPartition(map);
+        when(topicService.getLastRunDetails(TOPIC)).thenReturn(lastRunDetailsDto);
     }
 
     @Test
@@ -78,16 +77,16 @@ public class TopicControllerTest {
     }
 
     @Test
-    public void testGetLastRunningByTopic() throws Exception {
+    public void testGetLastRun() throws Exception {
         ResultActions resultActions = this.mockMvc.perform(
                 get(TOPIC_LAST_RUN_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
-        Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRunning\":\"1984-12-19-00-00-00\"}", resultActions.andReturn().getResponse().getContentAsString());
+        Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRun\":\"1984-12-19-00-00-00\"}", resultActions.andReturn().getResponse().getContentAsString());
 
     }
 
     @Test
-    public void testGetStaticsForLastRunningByTopic() throws Exception {
+    public void testGetLastRunStats() throws Exception {
         ResultActions resultActions = this.mockMvc.perform(
                 get(TOPIC_LAST_RUN_STATS_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
@@ -95,7 +94,7 @@ public class TopicControllerTest {
     }
 
     @Test
-    public void testGetLastRunningDetailsByTopic() throws Exception {
+    public void testGetLastRunDetails() throws Exception {
         ResultActions resultActions = this.mockMvc.perform(
                 get(TOPIC_DETAILS_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 

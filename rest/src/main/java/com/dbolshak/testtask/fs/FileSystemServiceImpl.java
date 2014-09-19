@@ -16,19 +16,19 @@ public class FileSystemServiceImpl implements FileSystemService {
     private BaseDirProvider baseDirProvider;
 
     @Override
-    public String getLatestRunning(String topic) {
+    public String getLastRun(String topic) {
         File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
-        final String[] latestRunning = new String[]{""};
+        final String[] lastRun = new String[]{""};
         history.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String timeStamp) {
-                if (latestRunning[0].compareTo(timeStamp) < 0) {
-                    latestRunning[0] = timeStamp;
+                if (lastRun[0].compareTo(timeStamp) < 0) {
+                    lastRun[0] = timeStamp;
                 }
                 return true;
             }
         });
-        return latestRunning[0];
+        return lastRun[0];
     }
 
     @Override
