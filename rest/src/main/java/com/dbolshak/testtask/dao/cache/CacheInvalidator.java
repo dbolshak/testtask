@@ -13,11 +13,15 @@ public class CacheInvalidator extends AbstractTopicChangingListener {
 
     @Override
     public void onTimeStampModified(String topic, String timeStamp) {
-        cacheService.remove(topic, timeStamp);
+        invalidateCacheEntry(topic, timeStamp);
     }
 
     @Override
     public void onTimeStampDeleted(String topic, String timeStamp) {
+        invalidateCacheEntry(topic, timeStamp);
+    }
+
+    private void invalidateCacheEntry(String topic, String timeStamp) {
         cacheService.remove(topic, timeStamp);
     }
 }

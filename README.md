@@ -12,8 +12,7 @@
 
 
 Пример использования API
-localhost:8080/topics
-localhost:8080/lastRunning/1984-12-19-00-00-00
-localhost:8080/statisticsForLastRunning/1984-12-19-00-00-00
-localhost:8080/detailsForLastRunning/1984-12-19-00-00-00
-    
+localhost:8080/topic
+localhost:8080/topic/1984-12-19-00-00-00
+localhost:8080/topic/1984-12-19-00-00-00/lastRun
+localhost:8080/topic/1984-12-19-00-00-00/lastRun/stats    

@@ -1,8 +1,6 @@
 package com.dbolshak.testtask;
 
 import com.dbolshak.testtask.annotation.PostSetDir;
-import com.dbolshak.testtask.dao.TopicChangingNotifier;
-import com.dbolshak.testtask.fs.Indexer;
 import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,10 +18,6 @@ public class ApplicationRunner implements CommandLineRunner {
     private ApplicationContext context;
     @Autowired
     private BaseDirProvider baseDirProvider;
-    @Autowired
-    private Indexer indexer;
-    @Autowired
-    private TopicChangingNotifier topicChangingNotifier;
 
     @Override
     public void run(String... strings) throws Exception {
