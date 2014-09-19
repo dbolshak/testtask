@@ -23,7 +23,7 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping
     @ResponseBody
     public ResponseEntity<ExistingTopicsDto> getExistingTopics() {
         return new ResponseEntity(topicService.getAllExistingTopics(), HttpStatus.OK);

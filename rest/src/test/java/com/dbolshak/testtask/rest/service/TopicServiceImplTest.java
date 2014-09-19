@@ -11,11 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,39 +28,39 @@ public class TopicServiceImplTest {
     @Mock
     private TopicDao topicDao;
 
+    private static final String LAST_TOPIC = "topic-1";
+    private static final List<String> ALL_TOPICS = Arrays.asList(LAST_TOPIC, "topic-2");
+    private static final String TIME_STAMP_OF_LAST_TOPIC = "1984-19-12-00-00-00";
+
+    @Before
+    public void createFixture() {
+        TimeStampContent timeStampContent = new TimeStampContent();
+        timeStampContent.put(1, 1l);
+        timeStampContent.put(2, 3l);
+
+        when(topicDao.findAllTopics()).thenReturn(ALL_TOPICS);
+        when(topicDao.topicExists(LAST_TOPIC)).thenReturn(true);
+        when(topicDao.findLastRunningFor(LAST_TOPIC)).thenReturn(TIME_STAMP_OF_LAST_TOPIC);
+        when(topicDao.findTimeStampContent(LAST_TOPIC, TIME_STAMP_OF_LAST_TOPIC)).thenReturn(timeStampContent);
+    }
+
     @Test
     public void testGetAllExistingTopics() throws Exception {
-        when(topicDao.findAllTopics()).thenReturn(new ArrayList<String>() {{
-            add("topic-1");
-            add("topic-2");
-        }});
         ExistingTopicsDto existingTopicsDto = service.getAllExistingTopics();
 
-        assertEquals(2, existingTopicsDto.getExistingTopics().size());
+        assertEquals(ALL_TOPICS.size(), existingTopicsDto.getExistingTopics().size());
     }
 
     @Test
     public void testFindLastRunningFor() throws Exception {
-        String topic1 = "topic-1";
-        String timeStamp = "1984-19-12-00-00-00";
-        when(topicDao.findLastRunningFor(topic1)).thenReturn(timeStamp);
+        LastRunningDto lastRunningDto = service.findLastRunningFor(LAST_TOPIC);
 
-        LastRunningDto lastRunningDto = service.findLastRunningFor(topic1);
-
-        assertEquals(timeStamp, lastRunningDto.getLastRunning());
-
+        assertEquals(TIME_STAMP_OF_LAST_TOPIC, lastRunningDto.getLastRunning());
     }
 
     @Test
     public void testGetStaticsForLastRunningByTopic() throws Exception {
-        String topic1 = "topic-1";
-        String timeStamp = "1984-19-12-00-00-00";
-        TimeStampContent timeStampContent = new TimeStampContent();
-        timeStampContent.put(1, 1l);
-        timeStampContent.put(2, 3l);
-        when(topicDao.findLastRunningFor(topic1)).thenReturn(timeStamp);
-        when(topicDao.findTimeStampContent(topic1, timeStamp)).thenReturn(timeStampContent);
-        StatisticsForLastRunningDto statisticsForLastRunningDto = service.getStaticsForLastRunningByTopic(topic1);
+        StatisticsForLastRunningDto statisticsForLastRunningDto = service.getStaticsForLastRunningByTopic(LAST_TOPIC);
 
         assertEquals(1l, statisticsForLastRunningDto.getMin());
         assertEquals(3l, statisticsForLastRunningDto.getMax());
@@ -69,24 +69,13 @@ public class TopicServiceImplTest {
 
     @Test
     public void testGetLastRunningDetailsByTopic() throws Exception {
-        String topic1 = "topic-1";
-        String timeStamp = "1984-19-12-00-00-00";
-        TimeStampContent timeStampContent = new TimeStampContent();
-        timeStampContent.put(1, 1l);
-        timeStampContent.put(2, 3l);
-
-        when(topicDao.findLastRunningFor(topic1)).thenReturn(timeStamp);
-        when(topicDao.findTimeStampContent(topic1, timeStamp)).thenReturn(timeStampContent);
-        LastRunningDetailsDto lastRunningDetailsDto = service.getLastRunningDetailsByTopic(topic1);
+        LastRunningDetailsDto lastRunningDetailsDto = service.getLastRunningDetailsByTopic(LAST_TOPIC);
 
         assertEquals(2, lastRunningDetailsDto.getMessagesForPartition().size());
     }
 
     @Test
-    public void testTopicExists() throws Exception {
-        String topic1 = "topic-1";
-        when(topicDao.topicExists(topic1)).thenReturn(true);
-
-        assertTrue(service.topicExists(topic1));
+    public void ifTopicDaoHasTopicThenServiceMustReturnTrue() throws Exception {
+        assertTrue(service.topicExists(LAST_TOPIC));
     }
 }

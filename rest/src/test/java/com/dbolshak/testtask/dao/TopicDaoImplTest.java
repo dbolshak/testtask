@@ -1,6 +1,7 @@
 package com.dbolshak.testtask.dao;
 
 import com.dbolshak.testtask.dao.cache.CacheService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,88 +20,112 @@ public class TopicDaoImplTest {
     @Mock
     private CacheService cacheService;
 
+    private static final String TOPIC = "topic-1";
+    private static final String LAST_RUN = "1984-19-12-00-00-01";
+    private static final String NOT_LAST_RUN = "1984-19-12-00-00-01";
+
+    @Before
+    public void createFixture() {
+        /*
+         * Our DAO has at one topic at startup of any test
+         */
+        service.addTimeStamp(LAST_RUN, TOPIC);
+    }
+
+    @After
+    public void clear() {
+        /*
+         * Clear environment after all our modifications
+         */
+        service.clear();
+    }
+
     @Test
     public void testFindAllTopics() throws Exception {
-        String topic = "topic1";
-        String timeStamp = "timeStamp";
-        service.addTimeStamp(timeStamp, topic);
-
-        assertEquals(topic, service.findAllTopics().iterator().next());
-        assertEquals(1, service.findAllTopics().size());
+        /*
+         * Check our startup condition, we must have there one item, lets go and check it!
+         */
+        assertEquals(TOPIC, service.findAllTopics().iterator().next());
+        checkCountOfTopics(1);
     }
 
     @Test
     public void testClear() throws Exception {
-        String topic = "topic1";
-        String timeStamp = "timeStamp";
-        service.addTimeStamp(timeStamp, topic);
-
-        assertEquals(topic, service.findAllTopics().iterator().next());
+        /*
+         * Lets check that we have something in DAO
+         */
+        assertEquals(TOPIC, service.findAllTopics().iterator().next());
         assertEquals(1, service.findAllTopics().size());
 
+        /*
+         * Lets clear our DAO and check that it's empty now
+         */
         service.clear();
-        assertEquals(0, service.findAllTopics().size());
+        checkCountOfTopics(0);
     }
 
     @Test
     public void testRemoveTimeStamp() throws Exception {
-        String topic = "topic1";
-        String timeStamp = "timeStamp";
-        service.addTimeStamp(timeStamp, topic);
+        /*
+         * Make sure that we have LAST_RUN timestamp for topic TOPIC
+         */
+        assertEquals(LAST_RUN, service.findLastRunningFor(TOPIC));
 
-        assertEquals(timeStamp, service.findLastRunningFor(topic));
-
-        service.removeTimeStamp(timeStamp, topic);
-        assertEquals("", service.findLastRunningFor(topic));
+        /*
+         * Lets remove our known timestamp LAST_RUN for topic TOPIC and check that there is no any more this timestamp
+         */
+        service.removeTimeStamp(LAST_RUN, TOPIC);
+        assertEquals("", service.findLastRunningFor(TOPIC));
     }
 
     @Test
     public void testAddTimeStamp() throws Exception {
-        assertEquals(0, service.findAllTopics().size());
+        /*
+         * Clear our environment and check that we have no items in DAO
+         */
+        clear();
+        checkCountOfTopics(0);
 
-        String topic = "topic1";
-        String timeStamp = "timeStamp";
-        service.addTimeStamp(timeStamp, topic);
-
-        assertEquals(topic, service.findAllTopics().iterator().next());
-        assertEquals(1, service.findAllTopics().size());
+        /*
+         * Lets add some item in DAO and check that we see it there
+         */
+        service.addTimeStamp(LAST_RUN, TOPIC);
+        assertEquals(TOPIC, service.findAllTopics().iterator().next());
+        checkCountOfTopics(1);
     }
 
     @Test
     public void testFindLastRunningFor() throws Exception {
-        String topic = "topic1";
-        String timeStamp1 = "1984-19-12-00-00-01";
-        String timeStamp2 = "1984-19-12-00-00-00";
-        service.addTimeStamp(timeStamp1, topic);
-        service.addTimeStamp(timeStamp2, topic);
-
-        assertEquals(timeStamp1, service.findLastRunningFor(topic));
-
+        /*
+         * Lets add some non last time stamp and make sure that even in this case we will return the latest one
+         */
+        service.addTimeStamp(NOT_LAST_RUN, TOPIC);
+        assertEquals(LAST_RUN, service.findLastRunningFor(TOPIC));
     }
 
     @Test
     public void testFindTimeStampContent() throws Exception {
-        String topic = "topic1";
-        String timeStamp2 = "1984-19-12-00-00-00";
-        String timeStamp1 = "1984-19-12-00-00-01";
-        service.addTimeStamp(timeStamp1, topic);
-        service.addTimeStamp(timeStamp2, topic);
+        service.addTimeStamp(NOT_LAST_RUN, TOPIC);
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);
         timeStampContent.put(2, 3l);
 
-        when(cacheService.get(topic, timeStamp1)).thenReturn(timeStampContent);
+        when(cacheService.get(TOPIC, LAST_RUN)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampContent, service.findTimeStampContent(topic, service.findLastRunningFor(topic)));
+        assertEquals(timeStampContent, service.findTimeStampContent(TOPIC, service.findLastRunningFor(TOPIC)));
     }
 
     @Test
     public void testTopicExists() throws Exception {
-        String topic = "topic1";
-        String timeStamp = "1984-19-12-00-00-00";
-        service.addTimeStamp(timeStamp, topic);
+        /*
+         * Lets check that we can check exists or not of our topic which was added during startup
+         */
+        assertEquals(true, service.topicExists(TOPIC));
+    }
 
-        assertEquals(true, service.topicExists(topic));
+    // call this method if you want to check count of existing topics in our DAO
+    private void checkCountOfTopics(int expected) {
+        assertEquals(expected, service.findAllTopics().size());
     }
 }
