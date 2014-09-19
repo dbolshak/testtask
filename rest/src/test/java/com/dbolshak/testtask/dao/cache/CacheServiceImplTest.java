@@ -5,13 +5,16 @@ import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CacheServiceImplTest {
     @InjectMocks
     private CacheService service = new CacheServiceImpl();
@@ -19,11 +22,6 @@ public class CacheServiceImplTest {
     private Computable fileReader;
     @Mock
     private FileSystemService fileSystemService;
-
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testRemove() throws Exception {

@@ -18,17 +18,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Controller for our RESTFull service
  */
 @Controller
+@RequestMapping("/topic")
 public class TopicController {
     @Autowired
     private TopicService topicService;
 
-    @RequestMapping(value = "/topics", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ExistingTopicsDto> getExistingTopics() {
         return new ResponseEntity(topicService.getAllExistingTopics(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/lastRunning/{topic}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{topic}/lastRun", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<LastRunningDto> getLastRunningByTopic(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
@@ -37,7 +38,7 @@ public class TopicController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(value = "/statisticsForLastRunning/{topic}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{topic}/lastRun/stats", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<StatisticsForLastRunningDto> getStaticsForLastRunningByTopic(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {
@@ -47,7 +48,7 @@ public class TopicController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(value = "/detailsForLastRunning/{topic}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{topic}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<LastRunningDetailsDto> getLastRunningDetailsByTopic(@PathVariable String topic) {
         if (topicService.topicExists(topic)) {

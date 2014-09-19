@@ -8,9 +8,11 @@ import com.dbolshak.testtask.rest.dto.LastRunningDto;
 import com.dbolshak.testtask.rest.dto.StatisticsForLastRunningDto;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,16 +21,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TopicServiceImplTest {
     @InjectMocks
     private TopicService service = new TopicServiceImpl();
     @Mock
     private TopicDao topicDao;
-
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testGetAllExistingTopics() throws Exception {

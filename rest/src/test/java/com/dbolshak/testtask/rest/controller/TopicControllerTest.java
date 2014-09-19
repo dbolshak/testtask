@@ -8,14 +8,17 @@ import com.dbolshak.testtask.rest.service.TopicService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TopicControllerTest {
     @InjectMocks
     private TopicController controller;
@@ -35,21 +39,18 @@ public class TopicControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(controller).setMessageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
 
     @Test
     public void testGetExistingTopics() throws Exception {
         ExistingTopicsDto existingTopicsDto = new ExistingTopicsDto();
-        existingTopicsDto.setExistingTopics(new ArrayList<String>() {{
-            add("topic-1");
-            add("topic-2");
-        }});
+        existingTopicsDto.setExistingTopics(Arrays.asList("topic-1", "topic-2"));
+
         when(topicService.getAllExistingTopics()).thenReturn(existingTopicsDto);
 
         ResultActions resultActions = this.mockMvc.perform(
-                get("/topics").accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+                get("/topic/").accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
         Assert.assertEquals("{\"existingTopics\":[\"topic-1\",\"topic-2\"]}", resultActions.andReturn().getResponse().getContentAsString());
     }
@@ -64,7 +65,7 @@ public class TopicControllerTest {
         when(topicService.topicExists(topic1)).thenReturn(true);
 
         ResultActions resultActions = this.mockMvc.perform(
-                get("/lastRunning/{topic}", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+                get("/topic/{topic}/lastRun", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRunning\":\"2000-12-12\"}", resultActions.andReturn().getResponse().getContentAsString());
 
@@ -79,7 +80,7 @@ public class TopicControllerTest {
         when(topicService.topicExists(topic1)).thenReturn(true);
 
         ResultActions resultActions = this.mockMvc.perform(
-                get("/statisticsForLastRunning/{topic}", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+                get("/topic/{topic}/lastRun/stats", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"total\":null,\"min\":0,\"max\":0,\"average\":0.0}", resultActions.andReturn().getResponse().getContentAsString());
     }
@@ -96,7 +97,7 @@ public class TopicControllerTest {
         when(topicService.topicExists(topic1)).thenReturn(true);
 
         ResultActions resultActions = this.mockMvc.perform(
-                get("/detailsForLastRunning/{topic}", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+                get("/topic/{topic}", topic1).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"messagesForPartition\":{\"1\":2,\"2\":4}}", resultActions.andReturn().getResponse().getContentAsString());
     }

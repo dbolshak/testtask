@@ -3,23 +3,21 @@ package com.dbolshak.testtask.dao;
 import com.dbolshak.testtask.dao.cache.CacheService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TopicDaoImplTest {
     @InjectMocks
     private TopicDao service = new TopicDaoImpl();
     @Mock
     private CacheService cacheService;
-
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testFindAllTopics() throws Exception {
