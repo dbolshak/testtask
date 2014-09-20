@@ -15,9 +15,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
+import static com.dbolshak.testtask.Fixture.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -29,21 +28,12 @@ public class TopicServiceImplTest {
     @Mock
     private TopicDao topicDao;
 
-    private static final String LAST_TOPIC = "topic-1";
-    private static final List<String> ALL_TOPICS = Arrays.asList(LAST_TOPIC, "topic-2");
-    private static final String TIME_STAMP_OF_LAST_TOPIC = "1984-19-12-00-00-00";
-    private static final TimeStamp TIME_STAMP = new TimeStamp(LAST_TOPIC, TIME_STAMP_OF_LAST_TOPIC);
-
     @Before
     public void createFixture() {
-        TimeStampContent timeStampContent = new TimeStampContent();
-        timeStampContent.put(1, 1l);
-        timeStampContent.put(2, 3l);
-
         when(topicDao.findAllTopics()).thenReturn(ALL_TOPICS);
-        when(topicDao.topicExists(LAST_TOPIC)).thenReturn(true);
-        when(topicDao.findLastRun(LAST_TOPIC)).thenReturn(TIME_STAMP_OF_LAST_TOPIC);
-        when(topicDao.findTimeStampContent(TIME_STAMP)).thenReturn(timeStampContent);
+        when(topicDao.topicExists(TOPIC)).thenReturn(true);
+        when(topicDao.findLastRun(TOPIC)).thenReturn(LAST_RUN);
+        when(topicDao.findTimeStampContent(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
     }
 
     @Test
@@ -55,14 +45,14 @@ public class TopicServiceImplTest {
 
     @Test
     public void testFindLastRun() throws Exception {
-        LastRunDto lastRunDto = service.findLastRunFor(LAST_TOPIC);
+        LastRunDto lastRunDto = service.findLastRunFor(TOPIC);
 
-        assertEquals(TIME_STAMP_OF_LAST_TOPIC, lastRunDto.getLastRun());
+        assertEquals(LAST_RUN, lastRunDto.getLastRun());
     }
 
     @Test
     public void testGetLastRunStats() throws Exception {
-        LastRunStatsDto lastRunStatsDto = service.getLastRunStats(LAST_TOPIC);
+        LastRunStatsDto lastRunStatsDto = service.getLastRunStats(TOPIC);
 
         assertEquals(1l, lastRunStatsDto.getMin());
         assertEquals(3l, lastRunStatsDto.getMax());
@@ -71,13 +61,13 @@ public class TopicServiceImplTest {
 
     @Test
     public void testGetLastRunDetails() throws Exception {
-        LastRunDetailsDto lastRunDetailsDto = service.getLastRunDetails(LAST_TOPIC);
+        LastRunDetailsDto lastRunDetailsDto = service.getLastRunDetails(TOPIC);
 
         assertEquals(2, lastRunDetailsDto.getMessagesForPartition().size());
     }
 
     @Test
     public void ifTopicDaoHasTopicThenServiceMustReturnTrue() throws Exception {
-        assertTrue(service.topicExists(LAST_TOPIC));
+        assertTrue(service.topicExists(TOPIC));
     }
 }

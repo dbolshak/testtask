@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.dbolshak.testtask.Fixture.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -19,11 +20,6 @@ public class TopicDaoImplTest {
     private TopicDao service = new TopicDaoImpl();
     @Mock
     private CacheService cacheService;
-
-    private static final String TOPIC = "topic-1";
-    private static final String LAST_RUN = "1984-19-12-00-00-01";
-    private static final String NOT_LAST_RUN = "1984-19-12-00-00-01";
-    private static final TimeStamp TIME_STAMP = new TimeStamp(TOPIC, LAST_RUN);
 
     @Before
     public void createFixture() {
@@ -108,13 +104,9 @@ public class TopicDaoImplTest {
     public void testFindTimeStampContent() throws Exception {
         service.addTimeStamp(new TimeStamp(TOPIC, NOT_LAST_RUN));
 
-        TimeStampContent timeStampContent = new TimeStampContent();
-        timeStampContent.put(1, 1l);
-        timeStampContent.put(2, 3l);
+        when(cacheService.get(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
 
-        when(cacheService.get(TIME_STAMP)).thenReturn(timeStampContent);
-
-        assertEquals(timeStampContent, service.findTimeStampContent(new TimeStamp(TOPIC, service.findLastRun(TOPIC))));
+        assertEquals(TIME_STAMP_CONTENT, service.findTimeStampContent(new TimeStamp(TOPIC, service.findLastRun(TOPIC))));
     }
 
     @Test
