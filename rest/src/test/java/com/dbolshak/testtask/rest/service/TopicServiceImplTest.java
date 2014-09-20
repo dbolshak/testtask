@@ -56,6 +56,7 @@ public class TopicServiceImplTest {
 
         assertEquals(1l, lastRunStatsDto.getMin());
         assertEquals(3l, lastRunStatsDto.getMax());
+        assertEquals(Double.valueOf(2), Double.valueOf(lastRunStatsDto.getAverage()));
         assertEquals(BigDecimal.valueOf(4), lastRunStatsDto.getTotal());
     }
 
