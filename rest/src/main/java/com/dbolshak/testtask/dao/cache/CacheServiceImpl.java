@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
@@ -57,8 +58,8 @@ public class CacheServiceImpl implements Computable, CacheService {
     }
 
     @Override
-    public void remove(String topic, String timeStamp) {
-        remove(fileSystemService.getAbsoluteFileName(topic, timeStamp));
+    public void remove(TimeStamp timeStamp) {
+        remove(fileSystemService.getAbsoluteFileName(timeStamp));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CacheServiceImpl implements Computable, CacheService {
     }
 
     @Override
-    public TimeStampContent get(String topic, String timeStamp) {
-        return get(fileSystemService.getAbsoluteFileName(topic, timeStamp));
+    public TimeStampContent get(TimeStamp timeStamp) {
+        return get(fileSystemService.getAbsoluteFileName(timeStamp));
     }
 }

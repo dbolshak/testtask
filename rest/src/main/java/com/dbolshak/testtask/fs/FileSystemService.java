@@ -1,5 +1,7 @@
 package com.dbolshak.testtask.fs;
 
+import com.dbolshak.testtask.TimeStamp;
+
 /**
  * A customer interface to work with file system.
  */
@@ -19,5 +21,5 @@ public interface FileSystemService {
      * @param timeStamp topic and timeStamp can identify the absolute path to a timestamp file
      * @return absolute path to a timestamp file
      */
-    String getAbsoluteFileName(String topic, String timeStamp);
+    String getAbsoluteFileName(TimeStamp timeStamp);
 }

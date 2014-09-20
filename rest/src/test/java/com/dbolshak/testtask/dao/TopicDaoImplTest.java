@@ -112,7 +112,7 @@ public class TopicDaoImplTest {
         timeStampContent.put(1, 1l);
         timeStampContent.put(2, 3l);
 
-        when(cacheService.get(TOPIC, LAST_RUN)).thenReturn(timeStampContent);
+        when(cacheService.get(TIME_STAMP)).thenReturn(timeStampContent);
 
         assertEquals(timeStampContent, service.findTimeStampContent(new TimeStamp(TOPIC, service.findLastRun(TOPIC))));
     }

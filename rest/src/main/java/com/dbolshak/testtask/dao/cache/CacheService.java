@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.TimeStampContent;
 
 /**
@@ -16,10 +17,9 @@ public interface CacheService {
     /**
      * Removes a cached value based on topic and timeStamp
      *
-     * @param topic topic for which we don't need to keep cached content any more for specified time stamp.
      * @param timeStamp timeStamp which was cached and now must be removed from cache.
      */
-    void remove(String topic, String timeStamp);
+    void remove(TimeStamp timeStamp);
 
     /**
      * Returns value from cache. In case of cache missing it loads it to cache.
@@ -32,9 +32,8 @@ public interface CacheService {
     /**
      * Returns value from cache. In case of cache missing it loads it to cache.
      *
-     * @param topic topic for which we need to get cached content for specified time stamp.
      * @param timeStamp timeStamp for which we want to get content.
      * @return content of specified file.
      */
-    TimeStampContent get(String topic, String timeStamp);
+    TimeStampContent get(TimeStamp timeStamp);
 }

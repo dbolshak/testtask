@@ -23,6 +23,6 @@ public class CacheInvalidator extends AbstractTopicChangingListener {
     }
 
     private void invalidateCacheEntry(TimeStamp timeStamp) {
-        cacheService.remove(timeStamp.getTopic(), timeStamp.getRun());
+        cacheService.remove(timeStamp);
     }
 }
