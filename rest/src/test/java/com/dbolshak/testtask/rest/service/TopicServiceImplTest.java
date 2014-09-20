@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
@@ -31,6 +32,7 @@ public class TopicServiceImplTest {
     private static final String LAST_TOPIC = "topic-1";
     private static final List<String> ALL_TOPICS = Arrays.asList(LAST_TOPIC, "topic-2");
     private static final String TIME_STAMP_OF_LAST_TOPIC = "1984-19-12-00-00-00";
+    private static final TimeStamp TIME_STAMP = new TimeStamp(LAST_TOPIC, TIME_STAMP_OF_LAST_TOPIC);
 
     @Before
     public void createFixture() {
@@ -41,7 +43,7 @@ public class TopicServiceImplTest {
         when(topicDao.findAllTopics()).thenReturn(ALL_TOPICS);
         when(topicDao.topicExists(LAST_TOPIC)).thenReturn(true);
         when(topicDao.findLastRun(LAST_TOPIC)).thenReturn(TIME_STAMP_OF_LAST_TOPIC);
-        when(topicDao.findTimeStampContent(LAST_TOPIC, TIME_STAMP_OF_LAST_TOPIC)).thenReturn(timeStampContent);
+        when(topicDao.findTimeStampContent(TIME_STAMP)).thenReturn(timeStampContent);
     }
 
     @Test

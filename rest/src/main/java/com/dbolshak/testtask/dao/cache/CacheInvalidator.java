@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.AbstractTopicChangingListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -12,16 +13,16 @@ public class CacheInvalidator extends AbstractTopicChangingListener {
     private CacheService cacheService;
 
     @Override
-    public void onTimeStampModified(String topic, String timeStamp) {
-        invalidateCacheEntry(topic, timeStamp);
+    public void onTimeStampModified(TimeStamp timeStamp) {
+        invalidateCacheEntry(timeStamp);
     }
 
     @Override
-    public void onTimeStampDeleted(String topic, String timeStamp) {
-        invalidateCacheEntry(topic, timeStamp);
+    public void onTimeStampDeleted(TimeStamp timeStamp) {
+        invalidateCacheEntry(timeStamp);
     }
 
-    private void invalidateCacheEntry(String topic, String timeStamp) {
-        cacheService.remove(topic, timeStamp);
+    private void invalidateCacheEntry(TimeStamp timeStamp) {
+        cacheService.remove(timeStamp.getTopic(), timeStamp.getRun());
     }
 }

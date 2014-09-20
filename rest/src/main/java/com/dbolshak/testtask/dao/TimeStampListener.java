@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.fs.FileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,14 +13,14 @@ public class TimeStampListener extends AbstractTopicChangingListener {
     private FileSystemService fileSystemService;
 
     @Override
-    public void onTimeStampAdded(String topic, String timeStamp) {
-        topicDao.addTimeStamp(timeStamp, topic);
+    public void onTimeStampAdded(TimeStamp timeStamp) {
+        topicDao.addTimeStamp(timeStamp);
     }
 
     @Override
-    public void onTimeStampDeleted(String topic, String timeStamp) {
-        topicDao.removeTimeStamp(timeStamp, topic);
+    public void onTimeStampDeleted(TimeStamp timeStamp) {
+        topicDao.removeTimeStamp(timeStamp);
         //just in case if someone deleted the latest timestamp we need to refresh it
-        topicDao.addTimeStamp(fileSystemService.getLastRun(topic), topic);
+        topicDao.addTimeStamp(new TimeStamp(timeStamp.getTopic(), fileSystemService.getLastRun(timeStamp.getTopic())));
     }
 }

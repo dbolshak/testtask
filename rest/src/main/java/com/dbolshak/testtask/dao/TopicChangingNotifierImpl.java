@@ -1,6 +1,7 @@
 package com.dbolshak.testtask.dao;
 
 import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.*;
@@ -35,7 +36,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                             if (Helper.validateFileName(event.getFile().toString())) {
                                 String[] paths = event.getFile().toString().replace("\\", "/").split("/");
                                 for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampAdded(paths[paths.length - 4], paths[paths.length - 2]);
+                                    listener.onTimeStampAdded(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
                                 }
                             }
                         }
@@ -44,7 +45,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                             if (Helper.validateFileName(event.getFile().toString())) {
                                 String[] paths = event.getFile().toString().replace("\\", "/").split("/");
                                 for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampDeleted(paths[paths.length - 4], paths[paths.length - 2]);
+                                    listener.onTimeStampDeleted(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
                                 }
                             }
                         }
@@ -53,7 +54,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                             if (Helper.validateFileName(event.getFile().toString())) {
                                 String[] paths = event.getFile().toString().replace("\\", "/").split("/");
                                 for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampModified(paths[paths.length - 4], paths[paths.length - 2]);
+                                    listener.onTimeStampModified(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
                                 }
                             }
                         }

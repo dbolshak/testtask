@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.cache.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,17 +26,17 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public void removeTimeStamp(String timeStamp, String topic) {
-        ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
+    public void removeTimeStamp(TimeStamp timeStamp) {
+        ConcurrentSkipListSet<String> timeStamps = storage.get(timeStamp.getTopic());
         if (timeStamps != null && !timeStamps.isEmpty()) {
-            timeStamps.remove(timeStamp);
+            timeStamps.remove(timeStamp.getRun());
         }
     }
 
     @Override
-    public void addTimeStamp(String timeStamp, String topic) {
-        ConcurrentSkipListSet<String> timeStamps = findOrCreate(topic);
-        timeStamps.add(timeStamp);
+    public void addTimeStamp(TimeStamp timeStamp) {
+        ConcurrentSkipListSet<String> timeStamps = findOrCreate(timeStamp.getTopic());
+        timeStamps.add(timeStamp.getRun());
     }
 
     @Override
@@ -48,8 +49,8 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public TimeStampContent findTimeStampContent(String topic, String timeStamp) {
-        return cacheService.get(topic, timeStamp);
+    public TimeStampContent findTimeStampContent(TimeStamp timeStamp) {
+        return cacheService.get(timeStamp.getTopic(), timeStamp.getRun());
     }
 
     @Override

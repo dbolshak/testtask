@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
@@ -32,7 +33,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunStatsDto getLastRunStats(String topic) {
         LastRunStatsDto lastRunStatsDto = new LastRunStatsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRun(topic));
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
         BigDecimal total = BigDecimal.ZERO;
         if (!timeStampContent.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
@@ -57,7 +58,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunDetailsDto getLastRunDetails(String topic) {
         LastRunDetailsDto lastRunDetailsDto = new LastRunDetailsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(topic, topicDao.findLastRun(topic));
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
         lastRunDetailsDto.setMessagesForPartition(timeStampContent.getContent());
         return lastRunDetailsDto;
     }

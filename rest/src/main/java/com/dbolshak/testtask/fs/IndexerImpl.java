@@ -1,8 +1,10 @@
 package com.dbolshak.testtask.fs;
 
 import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import com.dbolshak.testtask.utils.Helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,24 +51,24 @@ public class IndexerImpl implements Indexer {
         });
 
         ExecutorService executor = Executors.newFixedThreadPool(16);
-        List<Future<Map.Entry<String, String>>> list = new ArrayList<>(1000);
+        List<Future<TimeStamp>> list = new ArrayList<>(1000);
 
         for (final File topic : topics) {
-            Future<Map.Entry<String, String>> future = executor.submit(new Callable<Map.Entry<String, String>>() {
+            Future<TimeStamp> future = executor.submit(new Callable<TimeStamp>() {
                 @Override
-                public Map.Entry<String, String> call() throws Exception {
+                public TimeStamp call() throws Exception {
                     String topicStr = topic.getName();
-                    return new AbstractMap.SimpleEntry<>(fileSystemService.getLastRun(topicStr), topicStr);
+                    return new TimeStamp(topicStr, fileSystemService.getLastRun(topicStr));
                 }
             });
             list.add(future);
         }
-        for (Future<Map.Entry<String, String>> fut : list) {
+        for (Future<TimeStamp> fut : list) {
             try {
-                Map.Entry<String, String> timeStampAndTopic = fut.get();
-                topicDao.addTimeStamp(timeStampAndTopic.getKey(), timeStampAndTopic.getValue());
+                TimeStamp timeStamp = fut.get();
+                topicDao.addTimeStamp(timeStamp);
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                throw new ApplicationRuntimeException("An exception", e);
             }
         }
         executor.shutdown();
