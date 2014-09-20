@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.fs.FileSystemService;
@@ -27,22 +28,22 @@ public class CacheServiceImplTest {
         String topic = "topic";
         String fullPath = topic + timeStamp;
 
-        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
+        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);
         timeStampContent.put(2, 3l);
         when(fileReader.compute(fullPath)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampContent, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(new TimeStamp(topic, timeStamp)));
         verify(fileReader).compute(fullPath);
 
-        assertEquals(timeStampContent, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(new TimeStamp(topic, timeStamp)));
         verifyZeroInteractions(fileReader);
 
-        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
-        service.remove(topic, timeStamp);
-        service.get(topic, timeStamp);
+        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
+        service.remove(new TimeStamp(topic, timeStamp));
+        service.get(new TimeStamp(topic, timeStamp));
         verify(fileReader, atLeast(2)).compute(fullPath);//init cache again
     }
 
@@ -67,14 +68,14 @@ public class CacheServiceImplTest {
         String topic = "topic";
         String fullPath = topic + timeStamp;
 
-        when(fileSystemService.getAbsoluteFileName(topic, timeStamp)).thenReturn(fullPath);
+        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);
         timeStampContent.put(2, 3l);
         when(fileReader.compute(fullPath)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampContent, service.get(topic, timeStamp));
+        assertEquals(timeStampContent, service.get(new TimeStamp(topic, timeStamp)));
         verify(fileReader).compute(fullPath);
     }
 }

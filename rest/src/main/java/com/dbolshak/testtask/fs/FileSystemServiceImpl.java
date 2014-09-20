@@ -1,6 +1,7 @@
 package com.dbolshak.testtask.fs;
 
 import com.dbolshak.testtask.BaseDirProvider;
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     @Override
-    public String getAbsoluteFileName(String topic, String timeStamp) {
-        return Helper.getFileName(baseDirProvider.getBaseDir(), topic, timeStamp);
+    public String getAbsoluteFileName(TimeStamp timeStamp) {
+        return Helper.getFileName(baseDirProvider.getBaseDir(), timeStamp.getTopic(), timeStamp.getRun());
     }
 }

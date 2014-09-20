@@ -1,5 +1,6 @@
 package com.dbolshak.testtask.dao;
 
+import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.cache.CacheService;
 import org.junit.After;
 import org.junit.Before;
@@ -22,13 +23,14 @@ public class TopicDaoImplTest {
     private static final String TOPIC = "topic-1";
     private static final String LAST_RUN = "1984-19-12-00-00-01";
     private static final String NOT_LAST_RUN = "1984-19-12-00-00-01";
+    private static final TimeStamp TIME_STAMP = new TimeStamp(TOPIC, LAST_RUN);
 
     @Before
     public void createFixture() {
         /*
          * Our DAO has at one topic at startup of any test
          */
-        service.addTimeStamp(LAST_RUN, TOPIC);
+        service.addTimeStamp(TIME_STAMP);
     }
 
     @After
@@ -73,7 +75,7 @@ public class TopicDaoImplTest {
         /*
          * Lets remove our known timestamp LAST_RUN for topic TOPIC and check that there is no any more this timestamp
          */
-        service.removeTimeStamp(LAST_RUN, TOPIC);
+        service.removeTimeStamp(TIME_STAMP);
         assertEquals("", service.findLastRun(TOPIC));
     }
 
@@ -88,7 +90,7 @@ public class TopicDaoImplTest {
         /*
          * Lets add some item in DAO and check that we see it there
          */
-        service.addTimeStamp(LAST_RUN, TOPIC);
+        service.addTimeStamp(TIME_STAMP);
         assertEquals(TOPIC, service.findAllTopics().iterator().next());
         checkCountOfTopics(1);
     }
@@ -98,21 +100,21 @@ public class TopicDaoImplTest {
         /*
          * Lets add some non last time stamp and make sure that even in this case we will return the latest one
          */
-        service.addTimeStamp(NOT_LAST_RUN, TOPIC);
+        service.addTimeStamp(new TimeStamp(TOPIC, NOT_LAST_RUN));
         assertEquals(LAST_RUN, service.findLastRun(TOPIC));
     }
 
     @Test
     public void testFindTimeStampContent() throws Exception {
-        service.addTimeStamp(NOT_LAST_RUN, TOPIC);
+        service.addTimeStamp(new TimeStamp(TOPIC, NOT_LAST_RUN));
 
         TimeStampContent timeStampContent = new TimeStampContent();
         timeStampContent.put(1, 1l);
         timeStampContent.put(2, 3l);
 
-        when(cacheService.get(TOPIC, LAST_RUN)).thenReturn(timeStampContent);
+        when(cacheService.get(TIME_STAMP)).thenReturn(timeStampContent);
 
-        assertEquals(timeStampContent, service.findTimeStampContent(TOPIC, service.findLastRun(TOPIC)));
+        assertEquals(timeStampContent, service.findTimeStampContent(new TimeStamp(TOPIC, service.findLastRun(TOPIC))));
     }
 
     @Test

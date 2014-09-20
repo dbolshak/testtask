@@ -1,5 +1,7 @@
 package com.dbolshak.testtask.dao;
 
+import com.dbolshak.testtask.TimeStamp;
+
 import java.util.Collection;
 
 public interface TopicDao {
@@ -19,17 +21,15 @@ public interface TopicDao {
      * removes specified timestamp for topic
      *
      * @param timeStamp timestamp which is needed to be removed
-     * @param topic topic for which we need to remove a specified timestamp
      */
-    void removeTimeStamp(String timeStamp, String topic);
+    void removeTimeStamp(TimeStamp timeStamp);
 
     /**
      * Adds timestamp to topic
      *
-     * @param timeStamp timestamp which is needed to be added
-     * @param topic topic for which we need to add a specified timestamp
+     * @param timeStamp timestamp which is needed to be added.
      */
-    void addTimeStamp(String timeStamp, String topic);
+    void addTimeStamp(TimeStamp timeStamp);
 
     /**
      * Returns time stamp of the last run for specified topic
@@ -42,11 +42,10 @@ public interface TopicDao {
     /**
      * Returns all information about specified topic and timestamp or null if not found.
      *
-     * @param topic a topic for which we need to get timestamp content
      * @param timeStamp a timestamp for which we need to get timestamp content
      * @return TimeStampContent for specified topic and timeStamp.
      */
-    TimeStampContent findTimeStampContent(String topic, String timeStamp);
+    TimeStampContent findTimeStampContent(TimeStamp timeStamp);
 
     /**
      * Check that specified topic exists
