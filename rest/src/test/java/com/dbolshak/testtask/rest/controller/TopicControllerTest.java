@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import static com.dbolshak.testtask.Fixture.*;
 import static org.mockito.Mockito.when;
@@ -62,14 +61,14 @@ public class TopicControllerTest {
 
     @Test
     public void testGetExistingTopics() throws Exception {
-        String response = getHttpOkResponceAsString(ALL_TOPICS_URL);
+        String response = getHttpOkResponseAsString(ALL_TOPICS_URL);
 
         Assert.assertEquals("{\"existingTopics\":[\"topic-1\",\"topic-2\"]}", response);
     }
 
     @Test
     public void testGetLastRun() throws Exception {
-        String response = getHttpOkResponceAsString(TOPIC_LAST_RUN_URL, TOPIC);
+        String response = getHttpOkResponseAsString(TOPIC_LAST_RUN_URL, TOPIC);
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRun\":\"1984-12-19-00-00-01\"}", response);
 
@@ -77,19 +76,19 @@ public class TopicControllerTest {
 
     @Test
     public void testGetLastRunStats() throws Exception {
-        String response = getHttpOkResponceAsString(TOPIC_LAST_RUN_STATS_URL, TOPIC);
+        String response = getHttpOkResponseAsString(TOPIC_LAST_RUN_STATS_URL, TOPIC);
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"total\":null,\"min\":0,\"max\":0,\"average\":0.0}", response);
     }
 
     @Test
     public void testGetLastRunDetails() throws Exception {
-        String response = getHttpOkResponceAsString(TOPIC_DETAILS_URL, TOPIC);
+        String response = getHttpOkResponseAsString(TOPIC_DETAILS_URL, TOPIC);
 
         Assert.assertEquals("{\"topic\":\"topic-1\",\"messagesForPartition\":{\"1\":1,\"2\":3}}", response);
     }
 
-    private String getHttpOkResponceAsString(String url, String ...params) throws Exception {
+    private String getHttpOkResponseAsString(String url, String... params) throws Exception {
         return this.mockMvc.perform(
                 get(url, params).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
     }

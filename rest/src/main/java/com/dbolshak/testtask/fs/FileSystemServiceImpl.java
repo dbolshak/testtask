@@ -6,10 +6,10 @@ import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
-
 import java.io.File;
 import java.io.FilenameFilter;
+
+import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
 
 @Service
 public class FileSystemServiceImpl implements FileSystemService {

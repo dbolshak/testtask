@@ -17,7 +17,6 @@ public interface FileSystemService {
     /**
      * Returns a absolute file name where information about timestamp for specified topic could be found.
      *
-     * @param topic topic and timeStamp can identify the absolute path to a timestamp file
      * @param timeStamp topic and timeStamp can identify the absolute path to a timestamp file
      * @return absolute path to a timestamp file
      */

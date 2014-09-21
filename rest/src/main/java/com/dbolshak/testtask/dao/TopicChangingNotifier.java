@@ -3,7 +3,7 @@ package com.dbolshak.testtask.dao;
 /**
  * This interface provides a basic API for working with listeners
  */
-public interface TopicChangingNotifier {
+interface TopicChangingNotifier {
     /**
      * initializes out notifier.
      */
