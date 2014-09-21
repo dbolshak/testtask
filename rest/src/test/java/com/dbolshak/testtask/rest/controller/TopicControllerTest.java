@@ -62,34 +62,35 @@ public class TopicControllerTest {
 
     @Test
     public void testGetExistingTopics() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(
-                get(ALL_TOPICS_URL).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+        String response = getHttpOkResponceAsString(ALL_TOPICS_URL);
 
-        Assert.assertEquals("{\"existingTopics\":[\"topic-1\",\"topic-2\"]}", resultActions.andReturn().getResponse().getContentAsString());
+        Assert.assertEquals("{\"existingTopics\":[\"topic-1\",\"topic-2\"]}", response);
     }
 
     @Test
     public void testGetLastRun() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(
-                get(TOPIC_LAST_RUN_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+        String response = getHttpOkResponceAsString(TOPIC_LAST_RUN_URL, TOPIC);
 
-        Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRun\":\"1984-12-19-00-00-01\"}", resultActions.andReturn().getResponse().getContentAsString());
+        Assert.assertEquals("{\"topic\":\"topic-1\",\"lastRun\":\"1984-12-19-00-00-01\"}", response);
 
     }
 
     @Test
     public void testGetLastRunStats() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(
-                get(TOPIC_LAST_RUN_STATS_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+        String response = getHttpOkResponceAsString(TOPIC_LAST_RUN_STATS_URL, TOPIC);
 
-        Assert.assertEquals("{\"topic\":\"topic-1\",\"total\":null,\"min\":0,\"max\":0,\"average\":0.0}", resultActions.andReturn().getResponse().getContentAsString());
+        Assert.assertEquals("{\"topic\":\"topic-1\",\"total\":null,\"min\":0,\"max\":0,\"average\":0.0}", response);
     }
 
     @Test
     public void testGetLastRunDetails() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(
-                get(TOPIC_DETAILS_URL, TOPIC).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+        String response = getHttpOkResponceAsString(TOPIC_DETAILS_URL, TOPIC);
 
-        Assert.assertEquals("{\"topic\":\"topic-1\",\"messagesForPartition\":{\"1\":1,\"2\":3}}", resultActions.andReturn().getResponse().getContentAsString());
+        Assert.assertEquals("{\"topic\":\"topic-1\",\"messagesForPartition\":{\"1\":1,\"2\":3}}", response);
+    }
+
+    private String getHttpOkResponceAsString(String url, String ...params) throws Exception {
+        return this.mockMvc.perform(
+                get(url, params).accept(APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
     }
 }

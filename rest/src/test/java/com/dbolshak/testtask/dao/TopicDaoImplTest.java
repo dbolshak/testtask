@@ -102,6 +102,9 @@ public class TopicDaoImplTest {
 
     @Test
     public void testFindTimeStampContent() throws Exception {
+        /*
+         * Lets try to add some non last run into DAO and make sure that it will be ignored when we request content of last run.
+         */
         service.addTimeStamp(new TimeStamp(TOPIC, NOT_LAST_RUN));
 
         when(cacheService.get(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
