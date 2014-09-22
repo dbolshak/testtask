@@ -1,14 +1,14 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.Computable;
-import com.dbolshak.testtask.fs.FileSystemService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.dbolshak.testtask.Fixture.TIME_STAMP;
 import static com.dbolshak.testtask.Fixture.TIME_STAMP_CONTENT;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -19,54 +19,37 @@ public class CacheServiceImplTest {
     private CacheService service = new CacheServiceImpl();
     @Mock
     private Computable fileReader;
-    @Mock
-    private FileSystemService fileSystemService;
+
+    @Before
+    public void createFixture() {
+        when(fileReader.compute(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
+    }
+
+    @Test
+    public void getCachedValueFromLRU() throws Exception {
+        verifyFirstGetAndCacheMissing();
+
+        /*
+         * Now cache has required value, so fileReader must not be used to get the value.
+         */
+        assertEquals(TIME_STAMP_CONTENT, service.get(TIME_STAMP));
+        verifyZeroInteractions(fileReader);
+    }
 
     @Test
     public void testRemove() throws Exception {
-        String timeStamp = "some csv file";
-        String topic = "topic";
-        String fullPath = topic + timeStamp;
+        verifyFirstGetAndCacheMissing();
 
-        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
-
-        when(fileReader.compute(fullPath)).thenReturn(TIME_STAMP_CONTENT);
-
-        assertEquals(TIME_STAMP_CONTENT, service.get(new TimeStamp(topic, timeStamp)));
-        verify(fileReader).compute(fullPath);
-
-        assertEquals(TIME_STAMP_CONTENT, service.get(new TimeStamp(topic, timeStamp)));
-        verifyZeroInteractions(fileReader);
-
-        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
-        service.remove(new TimeStamp(topic, timeStamp));
-        service.get(new TimeStamp(topic, timeStamp));
-        verify(fileReader, atLeast(2)).compute(fullPath);//init cache again
+        /*
+         * We know, that cache has a cached value, so lets clear our cache and try to get value again.
+         */
+        service.remove(TIME_STAMP);
+        service.get(TIME_STAMP);
+        verify(fileReader, atLeast(2)).compute(TIME_STAMP);//init cache again
     }
 
-    @Test
-    public void testGet() throws Exception {
-        String fileName = "some csv file";
-
-        when(fileReader.compute(fileName)).thenReturn(TIME_STAMP_CONTENT);
-        assertEquals(TIME_STAMP_CONTENT, service.get(fileName));
-        verify(fileReader).compute(fileName);
-
-        assertEquals(TIME_STAMP_CONTENT, service.get(fileName));
-        verifyZeroInteractions(fileReader);
-    }
-
-    @Test
-    public void testGet1() throws Exception {
-        String timeStamp = "some csv file";
-        String topic = "topic";
-        String fullPath = topic + timeStamp;
-
-        when(fileSystemService.getAbsoluteFileName(new TimeStamp(topic, timeStamp))).thenReturn(fullPath);
-
-        when(fileReader.compute(fullPath)).thenReturn(TIME_STAMP_CONTENT);
-
-        assertEquals(TIME_STAMP_CONTENT, service.get(new TimeStamp(topic, timeStamp)));
-        verify(fileReader).compute(fullPath);
+    private void verifyFirstGetAndCacheMissing() {
+        assertEquals(TIME_STAMP_CONTENT, service.get(TIME_STAMP));
+        verify(fileReader).compute(TIME_STAMP);
     }
 }

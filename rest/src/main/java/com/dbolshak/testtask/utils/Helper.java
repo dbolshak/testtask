@@ -39,10 +39,7 @@ final public class Helper {
         if (!paths[paths.length - OFFSET_FILE_SEGMENT_INDEX].equals(Helper.OFFSETS_FILE_NAME)) {
             return false;
         }
-        if (!paths[paths.length - HISTORY_SUB_FOLDER_SEGMENT_INDEX].equals(Helper.HISTORY_SUB_FOLDER)) {
-            return false;
-        }
-        return Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - TIMESTAMP_SEGMENT_INDEX]).groupCount() == GROUP_COUNT_IN_REG_EXP;
+        return paths[paths.length - HISTORY_SUB_FOLDER_SEGMENT_INDEX].equals(Helper.HISTORY_SUB_FOLDER) && Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - TIMESTAMP_SEGMENT_INDEX]).groupCount() == GROUP_COUNT_IN_REG_EXP;
     }
 
     public static TimeStamp createTimeStampFromFile(String filePath) {

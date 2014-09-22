@@ -1,14 +1,17 @@
 package com.dbolshak.testtask.dao;
 
+import com.dbolshak.testtask.TimeStamp;
+
 /**
  * A basic interface which can provide content from specified file.
  */
 public interface Computable {
     /**
-     * Parses specified file and returns content.
+     * Perform some action on provided timeStamp
      *
-     * @param file file for which we need to get content
-     * @return content of specified file.
+     * @param timeStamp which we need to handle
+     * @return content of timeStamp.
+     * FIXME: correct javadoc
      */
-    TimeStampContent compute(String file);
+    TimeStampContent compute(final TimeStamp timeStamp);
 }

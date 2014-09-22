@@ -8,26 +8,11 @@ import com.dbolshak.testtask.dao.TimeStampContent;
  */
 public interface CacheService {
     /**
-     * Removes a cached value based on absolute file path
-     *
-     * @param file absolute file name.
-     */
-    void remove(String file);
-
-    /**
      * Removes a cached value based on topic and timeStamp
      *
      * @param timeStamp timeStamp which was cached and now must be removed from cache.
      */
     void remove(TimeStamp timeStamp);
-
-    /**
-     * Returns value from cache. In case of cache missing it loads it to cache.
-     *
-     * @param file absolute file name for which we want to get content from cache.
-     * @return content of specified file.
-     */
-    TimeStampContent get(String file);
 
     /**
      * Returns value from cache. In case of cache missing it loads it to cache.
