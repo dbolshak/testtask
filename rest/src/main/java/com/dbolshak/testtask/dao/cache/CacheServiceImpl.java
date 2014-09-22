@@ -3,7 +3,6 @@ package com.dbolshak.testtask.dao.cache;
 import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TimeStampContent;
-import com.dbolshak.testtask.fs.FileSystemService;
 import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.slf4j.LoggerFactory;
@@ -21,8 +20,6 @@ public class CacheServiceImpl implements Computable, CacheService {
             new ConcurrentLinkedHashMap.Builder<TimeStamp, Future<TimeStampContent>>().maximumWeightedCapacity(1_000_000).build();
     @Autowired
     private Computable fileReader;
-    @Autowired
-    private FileSystemService fileSystemService;
 
     @Override
     public TimeStampContent compute(final TimeStamp timeStamp) {

@@ -11,7 +11,6 @@ public interface Computable {
      *
      * @param timeStamp which we need to handle
      * @return content of timeStamp.
-     * FIXME: correct javadoc
      */
     TimeStampContent compute(final TimeStamp timeStamp);
 }

@@ -3,7 +3,6 @@ package com.dbolshak.testtask.fs;
 import com.dbolshak.testtask.TimeStamp;
 
 import java.io.File;
-import java.util.Collection;
 
 /**
  * A customer interface to work with file system.

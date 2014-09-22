@@ -11,7 +11,6 @@ import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 
 import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
 

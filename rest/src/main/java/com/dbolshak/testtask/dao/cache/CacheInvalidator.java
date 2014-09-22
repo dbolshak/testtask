@@ -7,7 +7,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 @Component
-@DependsOn("timeStampListener")
+@DependsOn("timeStampListener") /*timeStampListener bean must be registered before cacheInvalidator bean*/
 public class CacheInvalidator extends AbstractTopicChangingListener {
     @Autowired
     private CacheService cacheService;
