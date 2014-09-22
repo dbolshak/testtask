@@ -30,15 +30,7 @@ public class TimeStamp {
         }
 
         TimeStamp timeStamp = (TimeStamp) o;
-
-        if (!run.equals(timeStamp.run)) {
-            return false;
-        }
-        if (!topic.equals(timeStamp.topic)) {
-            return false;
-        }
-
-        return true;
+        return topic.equals(timeStamp.topic) && run.equals(timeStamp.run);
     }
 
     @Override
