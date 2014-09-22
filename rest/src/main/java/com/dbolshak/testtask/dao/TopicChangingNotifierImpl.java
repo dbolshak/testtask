@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-public class TopicChangingNotifierImpl implements TopicChangingNotifier {
+public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileListener {
     private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
     private final Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
     @Autowired
@@ -31,34 +31,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
                     LOG.info("Setting VFS listener started");
                     FileSystemManager fsManager = VFS.getManager();
                     FileObject listenDir = fsManager.resolveFile(baseDirProvider.getBaseDir());
-                    DefaultFileMonitor fm = new DefaultFileMonitor(new FileListener() {
-                        public void fileCreated(FileChangeEvent event) throws Exception {
-                            if (Helper.validateFileName(event.getFile().toString())) {
-                                String[] paths = event.getFile().toString().replace("\\", "/").split("/");
-                                for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampAdded(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
-                                }
-                            }
-                        }
-
-                        public void fileDeleted(FileChangeEvent event) throws Exception {
-                            if (Helper.validateFileName(event.getFile().toString())) {
-                                String[] paths = event.getFile().toString().replace("\\", "/").split("/");
-                                for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampDeleted(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
-                                }
-                            }
-                        }
-
-                        public void fileChanged(FileChangeEvent event) throws Exception {
-                            if (Helper.validateFileName(event.getFile().toString())) {
-                                String[] paths = event.getFile().toString().replace("\\", "/").split("/");
-                                for (TopicChangingListener listener : listeners) {
-                                    listener.onTimeStampModified(new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]));
-                                }
-                            }
-                        }
-                    });
+                    DefaultFileMonitor fm = new DefaultFileMonitor(TopicChangingNotifierImpl.this);
                     fm.setRecursive(true);
                     fm.addFile(listenDir);
                     fm.start();
@@ -78,5 +51,56 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier {
     @Override
     public void removeListener(TopicChangingListener topicChangingListener) {
         listeners.remove(topicChangingListener);
+    }
+
+    @Override
+    public void fileCreated(FileChangeEvent fileChangeEvent) {
+        handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
+            @Override
+            public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
+                listener.onTimeStampAdded(timeStamp);
+            }
+        });
+    }
+
+    @Override
+    public void fileDeleted(FileChangeEvent fileChangeEvent) {
+        handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
+            @Override
+            public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
+                listener.onTimeStampDeleted(timeStamp);
+            }
+        });
+    }
+
+    @Override
+    public void fileChanged(FileChangeEvent fileChangeEvent) {
+        handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
+            @Override
+            public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
+                listener.onTimeStampModified(timeStamp);
+            }
+        });
+    }
+
+    private TimeStamp createTimeStampFromFileChangeEvent(FileChangeEvent fileChangeEvent) {
+        if (Helper.validateFileName(fileChangeEvent.getFile().toString())) {
+            String[] paths = fileChangeEvent.getFile().toString().replace("\\", "/").split("/");
+            return new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]);
+        }
+        return null;
+    }
+
+    private void handleFileSystemEvent(FileChangeEvent fileChangeEvent, FileActionHandlerCallback fileActionHandlerCallback) {
+        TimeStamp timeStamp  = createTimeStampFromFileChangeEvent(fileChangeEvent);
+        if (timeStamp != null) {
+            for (TopicChangingListener listener : listeners) {
+                fileActionHandlerCallback.fileActionHandle(listener, timeStamp);
+            }
+        }
+    }
+
+    private interface FileActionHandlerCallback {
+        void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp);
     }
 }
