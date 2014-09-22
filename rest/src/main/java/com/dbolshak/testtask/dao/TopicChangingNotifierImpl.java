@@ -97,11 +97,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
     }
 
     private TimeStamp createTimeStampFromFileChangeEvent(FileChangeEvent fileChangeEvent) {
-        if (Helper.validateFileName(fileChangeEvent.getFile().toString())) {
-            String[] paths = fileChangeEvent.getFile().toString().replace("\\", "/").split("/");
-            return new TimeStamp(paths[paths.length - 4], paths[paths.length - 2]);
-        }
-        return null;
+        return Helper.createTimeStampFromFile(fileChangeEvent.getFile().toString());
     }
 
     private void handleFileSystemEvent(FileChangeEvent fileChangeEvent, FileActionHandlerCallback fileActionHandlerCallback) {

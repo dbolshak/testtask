@@ -1,5 +1,7 @@
 package com.dbolshak.testtask.utils;
 
+import com.dbolshak.testtask.TimeStamp;
+
 import java.util.regex.Pattern;
 
 /**
@@ -14,24 +16,44 @@ final public class Helper {
     private static final Pattern TIME_STAMP_PATTERN = Pattern.compile(REG_EXP_DATE_PATTERN_STR);
     private static final String OFFSETS_FILE_NAME = "offsets.csv";
 
+    private static final int MIN_SEGMENT_COUNT = 4;
+    private static final int GROUP_COUNT_IN_REG_EXP = 6;
+    private static final int OFFSET_FILE_SEGMENT_INDEX = 1;
+    private static final int TIMESTAMP_SEGMENT_INDEX = 2;
+    private static final int HISTORY_SUB_FOLDER_SEGMENT_INDEX = 3;
+    private static final int TOPIC_SEGMENT_INDEX = 4;
+
+
     private Helper() {
     }
 
-    public static String getFileName(String baseDir, String topic, String timeStamp) {
-        return baseDir + FILE_SEPARATOR + topic + FILE_SEPARATOR + HISTORY_SUB_FOLDER + FILE_SEPARATOR + timeStamp + FILE_SEPARATOR + OFFSETS_FILE_NAME;
+    public static String getFileName(String baseDir, TimeStamp timeStamp) {
+        return baseDir + FILE_SEPARATOR + timeStamp.getTopic() + FILE_SEPARATOR + HISTORY_SUB_FOLDER + FILE_SEPARATOR + timeStamp.getRun() + FILE_SEPARATOR + OFFSETS_FILE_NAME;
     }
 
     public static boolean validateFileName(String fileName) {
-        String[] paths = fileName.replace("\\", "/").split("/");
-        if (paths.length < 4) {
+        String[] paths = splitFilePath(fileName);
+        if (paths.length < MIN_SEGMENT_COUNT) {
             return false;
         }
-        if (!paths[paths.length - 1].equals(Helper.OFFSETS_FILE_NAME)) {
+        if (!paths[paths.length - OFFSET_FILE_SEGMENT_INDEX].equals(Helper.OFFSETS_FILE_NAME)) {
             return false;
         }
-        if (!paths[paths.length - 3].equals(Helper.HISTORY_SUB_FOLDER)) {
+        if (!paths[paths.length - HISTORY_SUB_FOLDER_SEGMENT_INDEX].equals(Helper.HISTORY_SUB_FOLDER)) {
             return false;
         }
-        return Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - 2]).groupCount() == 6;
+        return Helper.TIME_STAMP_PATTERN.matcher(paths[paths.length - TIMESTAMP_SEGMENT_INDEX]).groupCount() == GROUP_COUNT_IN_REG_EXP;
+    }
+
+    public static TimeStamp createTimeStampFromFile(String filePath) {
+        if (Helper.validateFileName(filePath)) {
+            String[] paths = splitFilePath(filePath);
+            return new TimeStamp(paths[paths.length - TOPIC_SEGMENT_INDEX], paths[paths.length - TIMESTAMP_SEGMENT_INDEX]);
+        }
+        return null;
+    }
+
+    private static String[] splitFilePath(String fileName) {
+        return fileName.replace("\\", "/").split("/");
     }
 }

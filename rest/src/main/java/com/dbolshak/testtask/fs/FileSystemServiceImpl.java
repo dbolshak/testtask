@@ -34,6 +34,6 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     @Override
     public String getAbsoluteFileName(TimeStamp timeStamp) {
-        return Helper.getFileName(baseDirProvider.getBaseDir(), timeStamp.getTopic(), timeStamp.getRun());
+        return Helper.getFileName(baseDirProvider.getBaseDir(), timeStamp);
     }
 }
