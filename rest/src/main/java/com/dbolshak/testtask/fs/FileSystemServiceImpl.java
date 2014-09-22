@@ -43,13 +43,12 @@ public class FileSystemServiceImpl implements FileSystemService {
     @Override
     public File[] getAllTopics() {
         File root = new File(baseDirProvider.getBaseDir());
-        File[] topics = root.listFiles(new FilenameFilter() {
+        return root.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 Path pattern = Paths.get(dir.getAbsolutePath() + FILE_SEPARATOR + name + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });
-        return  topics;
     }
 }

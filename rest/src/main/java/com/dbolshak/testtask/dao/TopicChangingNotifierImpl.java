@@ -27,8 +27,10 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
         /*
          * We need to keep init method as asynchronous so it does not block other @PostSetDir methods.
          * Here we meed to register our file monitor, which will notify us about changes on a file system.
+         *
+         * VFS works slow if need to handle a lot of files
          */
-        new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {

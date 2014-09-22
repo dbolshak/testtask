@@ -1,6 +1,5 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.BaseDirProvider;
 import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.dao.TopicDao;
@@ -17,20 +16,17 @@ import java.util.concurrent.*;
 
 @Service
 public class IndexerImpl implements Indexer {
-    private final static Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
 
     @Autowired
     private TopicDao topicDao;
     @Autowired
-    private BaseDirProvider baseDirProvider;
-    @Autowired
     private FileSystemService fileSystemService;
-
 
     @Override
     @PostSetDir
     public void index() {
-        LOG.info(String.format("Going to index: %s directory", baseDirProvider.getBaseDir()));
+        LOG.info("Going to index: base_dir");
 
         ExecutorService executor = Executors.newFixedThreadPool(16);
         List<Future<TimeStamp>> list = new ArrayList<>(1000);

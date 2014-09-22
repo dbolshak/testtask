@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,13 +34,21 @@ public class ApplicationRunner implements CommandLineRunner {
         runPostSetDirMethods();
     }
 
-    private void runPostSetDirMethods() throws Exception {
+    private void runPostSetDirMethods() {
         for (String beanName : context.getBeanDefinitionNames()) {
             Object bean = context.getBean(beanName);
             for (Method method : bean.getClass().getMethods()) {
-                if (method.getAnnotation(PostSetDir.class) != null) {
-                    method.invoke(bean);
-                }
+                tryToRunPostSetDir(method, bean);
+            }
+        }
+    }
+
+    private void tryToRunPostSetDir(Method method, Object bean) {
+        if (method.getAnnotation(PostSetDir.class) != null) {
+            try {
+                method.invoke(bean);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new ApplicationRuntimeException("exception while calling PostSetDir", e);
             }
         }
     }

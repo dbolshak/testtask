@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.concurrent.*;
 
 @Service
@@ -27,7 +26,7 @@ public class CacheServiceImpl implements Computable, CacheService {
             Future<TimeStampContent> f = lru.get(timeStamp);
             if (f == null) {
                 Callable<TimeStampContent> callable = new Callable<TimeStampContent>() {
-                    public TimeStampContent call() throws InterruptedException, IOException, ExecutionException {
+                    public TimeStampContent call() {
                         return fileReader.compute(timeStamp);
                     }
                 };

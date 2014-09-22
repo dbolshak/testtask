@@ -4,7 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BaseDirProviderImpl implements BaseDirProvider {
-    private volatile String baseDir; //Write operation must be happen only once
+    //Write operation must be happen only once
+    private volatile String baseDir;
 
     @Override
     public String getBaseDir() {

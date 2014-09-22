@@ -22,13 +22,21 @@ public class TimeStamp {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TimeStamp timeStamp = (TimeStamp) o;
 
-        if (!run.equals(timeStamp.run)) return false;
-        if (!topic.equals(timeStamp.topic)) return false;
+        if (!run.equals(timeStamp.run)) {
+            return false;
+        }
+        if (!topic.equals(timeStamp.topic)) {
+            return false;
+        }
 
         return true;
     }
