@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 public class CacheServiceImpl implements Computable, CacheService {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
 
-    private final ConcurrentMap<String, Future<TimeStampContent>> cache =
+    private final ConcurrentMap<String, Future<TimeStampContent>> lru =
             new ConcurrentLinkedHashMap.Builder<String, Future<TimeStampContent>>().maximumWeightedCapacity(1_000_000).build();
     @Autowired
     private Computable fileReader;
@@ -27,7 +27,7 @@ public class CacheServiceImpl implements Computable, CacheService {
     @Override
     public TimeStampContent compute(final String file) {
         while (true) {
-            Future<TimeStampContent> f = cache.get(file);
+            Future<TimeStampContent> f = lru.get(file);
             if (f == null) {
                 Callable<TimeStampContent> callable = new Callable<TimeStampContent>() {
                     public TimeStampContent call() throws InterruptedException, IOException, ExecutionException {
@@ -35,7 +35,7 @@ public class CacheServiceImpl implements Computable, CacheService {
                     }
                 };
                 FutureTask<TimeStampContent> ft = new FutureTask<>(callable);
-                f = cache.putIfAbsent(file, ft);
+                f = lru.putIfAbsent(file, ft);
                 if (f == null) {
                     f = ft;
                     ft.run();
@@ -45,16 +45,16 @@ public class CacheServiceImpl implements Computable, CacheService {
                 return f.get();
             } catch (CancellationException e) {
                 LOG.warn("Compute task is cancelled by exception for file " + file, e);
-                cache.remove(file, f);
+                lru.remove(file, f);
             } catch (InterruptedException | ExecutionException e) {
-                throw new ApplicationRuntimeException("Unknown exception occurred while handling content in cache for file " + file, e);
+                throw new ApplicationRuntimeException("Unknown exception occurred while handling content in lru for file " + file, e);
             }
         }
     }
 
     @Override
     public void remove(String file) {
-        cache.remove(file);
+        lru.remove(file);
     }
 
     @Override
