@@ -24,6 +24,10 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
     @Override
     @PostSetDir
     public void init() {
+        /*
+         * We need to keep init method as asynchronous so it does not block other @PostSetDir methods.
+         * Here we meed to register our file monitor, which will notify us about changes on a file system.
+         */
         new Thread(new Runnable() {//VFS works slow if need to handle a lot of files
             @Override
             public void run() {
@@ -55,6 +59,9 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
 
     @Override
     public void fileCreated(FileChangeEvent fileChangeEvent) {
+        /*
+         * A new file has been just created, so lets handle this event
+         */
         handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
             @Override
             public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
@@ -65,6 +72,9 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
 
     @Override
     public void fileDeleted(FileChangeEvent fileChangeEvent) {
+        /*
+         * An existing file has been just deleted, so lets handle this event
+         */
         handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
             @Override
             public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
@@ -75,6 +85,9 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
 
     @Override
     public void fileChanged(FileChangeEvent fileChangeEvent) {
+        /*
+         * An existing file has been just modified, so lets handle this event
+         */
         handleFileSystemEvent(fileChangeEvent, new FileActionHandlerCallback() {
             @Override
             public void fileActionHandle(TopicChangingListener listener, TimeStamp timeStamp) {
