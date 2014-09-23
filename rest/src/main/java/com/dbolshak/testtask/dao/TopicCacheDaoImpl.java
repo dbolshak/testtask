@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-@Repository
-public class TopicDaoImpl implements TopicDao {
+@Repository("topicCacheDao")
+public class TopicCacheDaoImpl implements TopicCacheDao {
     private final ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;

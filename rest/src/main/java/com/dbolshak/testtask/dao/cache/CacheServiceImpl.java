@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
 
-@Service
+@Service("cacheService")
 public class CacheServiceImpl implements Computable, CacheService {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
 

@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.dao.TopicCacheDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDto;
@@ -24,14 +24,14 @@ public class TopicServiceImplTest {
     @InjectMocks
     private TopicService service = new TopicServiceImpl();
     @Mock
-    private TopicDao topicDao;
+    private TopicCacheDao topicCacheDao;
 
     @Before
     public void createFixture() {
-        when(topicDao.findAllTopics()).thenReturn(ALL_TOPICS);
-        when(topicDao.topicExists(TOPIC)).thenReturn(true);
-        when(topicDao.findLastRun(TOPIC)).thenReturn(LAST_RUN);
-        when(topicDao.findTimeStampContent(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
+        when(topicCacheDao.findAllTopics()).thenReturn(ALL_TOPICS);
+        when(topicCacheDao.topicExists(TOPIC)).thenReturn(true);
+        when(topicCacheDao.findLastRun(TOPIC)).thenReturn(LAST_RUN);
+        when(topicCacheDao.findTimeStampContent(TIME_STAMP)).thenReturn(TIME_STAMP_CONTENT);
     }
 
     @Test

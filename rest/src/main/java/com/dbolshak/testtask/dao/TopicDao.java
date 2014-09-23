@@ -4,6 +4,9 @@ import com.dbolshak.testtask.TimeStamp;
 
 import java.util.Collection;
 
+/**
+ * A basic read operations with DAO.
+ */
 public interface TopicDao {
     /**
      * returns all available topics
@@ -11,25 +14,6 @@ public interface TopicDao {
      * @return all available topics as a Collection of Strings
      */
     Collection<String> findAllTopics();
-
-    /**
-     * Removes all available information from internal structures
-     */
-    void clear();
-
-    /**
-     * removes specified timestamp for topic
-     *
-     * @param timeStamp timestamp which is needed to be removed
-     */
-    void removeTimeStamp(TimeStamp timeStamp);
-
-    /**
-     * Adds timestamp to topic
-     *
-     * @param timeStamp timestamp which is needed to be added.
-     */
-    void addTimeStamp(TimeStamp timeStamp);
 
     /**
      * Returns time stamp of the last run for specified topic

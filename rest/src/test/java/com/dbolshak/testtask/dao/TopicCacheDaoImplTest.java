@@ -15,9 +15,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TopicDaoImplTest {
+public class TopicCacheDaoImplTest {
     @InjectMocks
-    private TopicDao service = new TopicDaoImpl();
+    private TopicCacheDao service = new TopicCacheDaoImpl();
     @Mock
     private CacheService cacheService;
 

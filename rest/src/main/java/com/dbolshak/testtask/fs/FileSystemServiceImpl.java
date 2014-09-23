@@ -14,26 +14,10 @@ import java.nio.file.Paths;
 
 import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
 
-@Service
+@Service("fileSystemService")
 public class FileSystemServiceImpl implements FileSystemService {
     @Autowired
     private BaseDirProvider baseDirProvider;
-
-    @Override
-    public String getLastRun(String topic) {
-        File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
-        final String[] lastRun = new String[]{""};
-        history.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String timeStamp) {
-                if (lastRun[0].compareTo(timeStamp) < 0) {
-                    lastRun[0] = timeStamp;
-                }
-                return true;
-            }
-        });
-        return lastRun[0];
-    }
 
     @Override
     public String getAbsoluteFileName(TimeStamp timeStamp) {
@@ -41,7 +25,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     @Override
-    public File[] getAllTopics() {
+    public File[] findAllTopics() {
         File root = new File(baseDirProvider.getBaseDir());
         return root.listFiles(new FilenameFilter() {
             @Override

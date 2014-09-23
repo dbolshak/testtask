@@ -1,8 +1,8 @@
 package com.dbolshak.testtask.rest.service;
 
 import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.dao.TimeStampContent;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDto;
@@ -15,25 +15,25 @@ import java.math.BigDecimal;
 @Service
 public class TopicServiceImpl implements TopicService {
     @Autowired
-    private TopicDao topicDao;
+    private TopicDao fileSystemDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();
-        result.setExistingTopics(topicDao.findAllTopics());
+        result.setExistingTopics(fileSystemDao.findAllTopics());
         return result;
     }
 
     @Override
     public LastRunDto findLastRunFor(String topic) {
         LastRunDto lastRunDto = new LastRunDto(topic);
-        lastRunDto.setLastRun(topicDao.findLastRun(topic));
+        lastRunDto.setLastRun(fileSystemDao.findLastRun(topic));
         return lastRunDto;
     }
 
     @Override
     public LastRunStatsDto getLastRunStats(String topic) {
         LastRunStatsDto lastRunStatsDto = new LastRunStatsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
+        TimeStampContent timeStampContent = fileSystemDao.findTimeStampContent(new TimeStamp(topic, fileSystemDao.findLastRun(topic)));
         BigDecimal total = BigDecimal.ZERO;
         if (!timeStampContent.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
@@ -58,13 +58,13 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunDetailsDto getLastRunDetails(String topic) {
         LastRunDetailsDto lastRunDetailsDto = new LastRunDetailsDto(topic);
-        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
+        TimeStampContent timeStampContent = fileSystemDao.findTimeStampContent(new TimeStamp(topic, fileSystemDao.findLastRun(topic)));
         lastRunDetailsDto.setMessagesForPartition(timeStampContent.getContent());
         return lastRunDetailsDto;
     }
 
     @Override
     public boolean topicExists(String topic) {
-        return topicDao.topicExists(topic);
+        return fileSystemDao.topicExists(topic);
     }
 }
