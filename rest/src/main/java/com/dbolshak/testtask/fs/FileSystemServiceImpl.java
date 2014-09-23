@@ -1,7 +1,7 @@
 package com.dbolshak.testtask.fs;
 
 import com.dbolshak.testtask.BaseDirProvider;
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
 import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
 
 @Service("fileSystemService")
-public class FileSystemServiceImpl implements FileSystemService {
+class FileSystemServiceImpl implements FileSystemService {
     @Autowired
     private BaseDirProvider baseDirProvider;
 

@@ -1,6 +1,7 @@
 package com.dbolshak.testtask;
 
-import com.dbolshak.testtask.dao.TimeStampContent;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 
 import java.util.Arrays;
 import java.util.List;

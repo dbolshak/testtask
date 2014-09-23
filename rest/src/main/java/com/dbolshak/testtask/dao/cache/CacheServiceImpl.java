@@ -1,9 +1,9 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.Computable;
-import com.dbolshak.testtask.dao.TimeStampContent;
-import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.engine.Computable;
+import com.dbolshak.testtask.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.*;
 
 @Service("cacheService")
-public class CacheServiceImpl implements Computable, CacheService {
+class CacheServiceImpl implements Computable, CacheService {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CacheServiceImpl.class);
 
     private final ConcurrentMap<TimeStamp, Future<TimeStampContent>> lru =

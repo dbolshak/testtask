@@ -1,7 +1,7 @@
 package com.dbolshak.testtask;
 
 import com.dbolshak.testtask.annotation.PostSetDir;
-import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.exceptions.ApplicationRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;

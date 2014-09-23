@@ -1,12 +1,12 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.TimeStampContent;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 
 /**
  * Provides a basic API to get cached content or remove it.
  */
-public interface CacheService {
+interface CacheService {
     /**
      * Removes a cached value based on topic and timeStamp
      *

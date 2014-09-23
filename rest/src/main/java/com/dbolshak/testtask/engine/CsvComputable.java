@@ -1,9 +1,10 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.engine;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.exceptions.ApplicationRuntimeException;
 import com.dbolshak.testtask.fs.FileSystemService;
-import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Component("fileReader")
-public class CsvComputable implements Computable {
+class CsvComputable implements Computable {
     private static final Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
     @Autowired
     private FileSystemService fileSystemService;

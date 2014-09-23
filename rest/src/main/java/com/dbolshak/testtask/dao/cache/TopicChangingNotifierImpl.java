@@ -1,8 +1,8 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
 import com.dbolshak.testtask.BaseDirProvider;
-import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.annotation.PostSetDir;
+import com.dbolshak.testtask.model.TimeStamp;
 import com.dbolshak.testtask.utils.Helper;
 import org.apache.commons.vfs2.*;
 import org.apache.commons.vfs2.impl.DefaultFileMonitor;
@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
+/*class has `public` access in order to call @PostSetDir by reflection*/
 public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileListener {
     private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
     private final Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();

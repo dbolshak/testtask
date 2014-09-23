@@ -1,14 +1,13 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
-
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-public class AbstractTopicChangingListener implements TopicChangingListener {
+abstract class AbstractTopicChangingListener implements TopicChangingListener {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTopicChangingListener.class);
     @Autowired
     private TopicChangingNotifier topicChangingNotifier;

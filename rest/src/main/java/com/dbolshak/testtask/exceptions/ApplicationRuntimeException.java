@@ -1,4 +1,4 @@
-package com.dbolshak.testtask.rest.exceptions;
+package com.dbolshak.testtask.exceptions;
 
 /**
  * Our application wraps all exceptions to this one.

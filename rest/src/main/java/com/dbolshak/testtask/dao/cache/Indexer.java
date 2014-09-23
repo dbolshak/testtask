@@ -1,4 +1,4 @@
-package com.dbolshak.testtask.fs;
+package com.dbolshak.testtask.dao.cache;
 
 /**
  * This interface provides functionality to index a base_dir.

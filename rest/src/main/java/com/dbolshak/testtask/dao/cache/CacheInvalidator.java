@@ -1,7 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.AbstractTopicChangingListener;
+import com.dbolshak.testtask.model.TimeStamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @DependsOn("timeStampListener")
 /*timeStampListener bean must be registered before cacheInvalidator bean*/
-public class CacheInvalidator extends AbstractTopicChangingListener {
+class CacheInvalidator extends AbstractTopicChangingListener {
     @Autowired
     private CacheService cacheService;
 

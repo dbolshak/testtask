@@ -1,4 +1,4 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.model;
 
 import java.util.Collections;
 import java.util.Map;

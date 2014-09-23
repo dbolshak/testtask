@@ -1,7 +1,7 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.cache.CacheService;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Repository("topicCacheDao")
-public class TopicCacheDaoImpl implements TopicCacheDao {
+class TopicCacheDaoImpl implements TopicCacheDao {
     private final ConcurrentHashMap<String, ConcurrentSkipListSet<String>> storage = new ConcurrentHashMap<>(500);
     @Autowired
     private CacheService cacheService;

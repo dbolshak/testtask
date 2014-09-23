@@ -1,8 +1,9 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.model.TimeStamp;
 
-public interface TopicCacheDao extends TopicDao {
+interface TopicCacheDao extends TopicDao {
     /**
      * Removes all available information from internal structures
      */

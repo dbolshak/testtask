@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.fs;
 
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
 
 import java.io.File;
 

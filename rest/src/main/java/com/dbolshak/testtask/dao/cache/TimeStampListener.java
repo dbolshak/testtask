@@ -1,16 +1,16 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.fs.FileSystemDao;
+import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.model.TimeStamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TimeStampListener extends AbstractTopicChangingListener {
+class TimeStampListener extends AbstractTopicChangingListener {
     @Autowired
     private TopicCacheDao topicCacheDao;
     @Autowired
-    private FileSystemDao fileSystemDao;
+    private TopicDao fileSystemDao;
 
     @Override
     public void onTimeStampAdded(TimeStamp timeStamp) {

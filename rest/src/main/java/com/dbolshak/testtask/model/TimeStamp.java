@@ -1,4 +1,4 @@
-package com.dbolshak.testtask;
+package com.dbolshak.testtask.model;
 
 /**
  * Presents immutable structure to identify timestamp

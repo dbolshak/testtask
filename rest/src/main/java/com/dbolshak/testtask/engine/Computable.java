@@ -1,6 +1,7 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.engine;
 
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 
 /**
  * A basic interface which can provide content from specified file.

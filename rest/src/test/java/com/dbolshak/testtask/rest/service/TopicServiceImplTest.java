@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.rest.service;
 
-import com.dbolshak.testtask.dao.TopicCacheDao;
+import com.dbolshak.testtask.dao.TopicDao;
 import com.dbolshak.testtask.rest.dto.ExistingTopicsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDto;
@@ -24,7 +24,7 @@ public class TopicServiceImplTest {
     @InjectMocks
     private TopicService service = new TopicServiceImpl();
     @Mock
-    private TopicCacheDao topicCacheDao;
+    private TopicDao topicCacheDao;
 
     @Before
     public void createFixture() {

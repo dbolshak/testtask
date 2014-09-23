@@ -1,10 +1,11 @@
-package com.dbolshak.testtask.fs;
+package com.dbolshak.testtask.dao.fs;
 
 import com.dbolshak.testtask.BaseDirProvider;
-import com.dbolshak.testtask.TimeStamp;
-import com.dbolshak.testtask.dao.Computable;
 import com.dbolshak.testtask.dao.TopicDao;
-import com.dbolshak.testtask.dao.TimeStampContent;
+import com.dbolshak.testtask.engine.Computable;
+import com.dbolshak.testtask.fs.FileSystemService;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
 
 @Service
-public class FileSystemDao implements TopicDao {
+class FileSystemDao implements TopicDao {
     @Autowired
     private Computable fileReader;
     @Autowired

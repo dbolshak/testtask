@@ -1,4 +1,4 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
 /**
  * This interface provides a basic API for working with listeners

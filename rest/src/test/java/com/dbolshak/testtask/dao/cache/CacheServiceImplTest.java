@@ -1,6 +1,6 @@
 package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.dao.Computable;
+import com.dbolshak.testtask.engine.Computable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

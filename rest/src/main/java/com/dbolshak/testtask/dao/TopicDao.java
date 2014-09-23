@@ -1,6 +1,7 @@
 package com.dbolshak.testtask.dao;
 
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
+import com.dbolshak.testtask.model.TimeStampContent;
 
 import java.util.Collection;
 

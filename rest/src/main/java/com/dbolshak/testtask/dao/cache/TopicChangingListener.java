@@ -1,6 +1,6 @@
-package com.dbolshak.testtask.dao;
+package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
+import com.dbolshak.testtask.model.TimeStamp;
 
 /**
  * If you want to handle file system changes please implement this interface and register your instance.

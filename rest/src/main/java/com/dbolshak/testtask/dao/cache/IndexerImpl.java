@@ -1,9 +1,10 @@
-package com.dbolshak.testtask.fs;
+package com.dbolshak.testtask.dao.cache;
 
-import com.dbolshak.testtask.TimeStamp;
 import com.dbolshak.testtask.annotation.PostSetDir;
-import com.dbolshak.testtask.dao.TopicCacheDao;
-import com.dbolshak.testtask.rest.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.dao.TopicDao;
+import com.dbolshak.testtask.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.fs.FileSystemService;
+import com.dbolshak.testtask.model.TimeStamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,14 @@ import java.util.List;
 import java.util.concurrent.*;
 
 @Service
+/*class has `public` access in order to call @PostSetDir by reflection*/
 public class IndexerImpl implements Indexer {
     private static final Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
 
     @Autowired
     private TopicCacheDao topicCacheDao;
     @Autowired
-    private FileSystemDao fileSystemDao;
+    private TopicDao fileSystemDao;
     @Autowired
     private FileSystemService fileSystemService;
 
