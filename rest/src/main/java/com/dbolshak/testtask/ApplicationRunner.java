@@ -44,9 +44,12 @@ public class ApplicationRunner implements CommandLineRunner {
     }
 
     private void tryToRunPostSetDir(Method method, Object bean) {
-        if (method.getAnnotation(PostSetDir.class) != null) {
+        PostSetDir postSetDirAnnotation = method.getAnnotation(PostSetDir.class);
+        if (postSetDirAnnotation != null) {
             try {
-                method.invoke(bean);
+                if (postSetDirAnnotation.useCache()) {
+                    method.invoke(bean);
+                }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new ApplicationRuntimeException("exception while calling PostSetDir", e);
             }

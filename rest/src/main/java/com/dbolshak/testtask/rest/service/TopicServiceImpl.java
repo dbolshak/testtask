@@ -8,6 +8,7 @@ import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDto;
 import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,25 +16,26 @@ import java.math.BigDecimal;
 @Service
 public class TopicServiceImpl implements TopicService {
     @Autowired
-    private TopicDao topicCacheDao;
+    @Qualifier("topicCacheDao")
+    private TopicDao topicDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
         ExistingTopicsDto result = new ExistingTopicsDto();
-        result.setExistingTopics(topicCacheDao.findAllTopics());
+        result.setExistingTopics(topicDao.findAllTopics());
         return result;
     }
 
     @Override
     public LastRunDto findLastRunFor(String topic) {
         LastRunDto lastRunDto = new LastRunDto(topic);
-        lastRunDto.setLastRun(topicCacheDao.findLastRun(topic));
+        lastRunDto.setLastRun(topicDao.findLastRun(topic));
         return lastRunDto;
     }
 
     @Override
     public LastRunStatsDto getLastRunStats(String topic) {
         LastRunStatsDto lastRunStatsDto = new LastRunStatsDto(topic);
-        TimeStampContent timeStampContent = topicCacheDao.findTimeStampContent(new TimeStamp(topic, topicCacheDao.findLastRun(topic)));
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
         BigDecimal total = BigDecimal.ZERO;
         if (!timeStampContent.getContent().isEmpty()) {
             long min = Long.MAX_VALUE;
@@ -58,13 +60,13 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public LastRunDetailsDto getLastRunDetails(String topic) {
         LastRunDetailsDto lastRunDetailsDto = new LastRunDetailsDto(topic);
-        TimeStampContent timeStampContent = topicCacheDao.findTimeStampContent(new TimeStamp(topic, topicCacheDao.findLastRun(topic)));
+        TimeStampContent timeStampContent = topicDao.findTimeStampContent(new TimeStamp(topic, topicDao.findLastRun(topic)));
         lastRunDetailsDto.setMessagesForPartition(timeStampContent.getContent());
         return lastRunDetailsDto;
     }
 
     @Override
     public boolean topicExists(String topic) {
-        return topicCacheDao.topicExists(topic);
+        return topicDao.topicExists(topic);
     }
 }
