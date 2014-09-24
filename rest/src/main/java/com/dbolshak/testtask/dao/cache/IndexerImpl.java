@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 /*class has `public` access in order to call @PostSetDir by reflection*/
 public class IndexerImpl implements Indexer {
     private static final Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
+    private ExecutorService executor = Executors.newFixedThreadPool(8);
 
     @Autowired
     private TopicCacheDao topicCacheDao;
@@ -30,32 +31,40 @@ public class IndexerImpl implements Indexer {
     @Override
     @PostSetDir
     public void index() {
-        LOG.info("Going to index: base_dir");
-
-        ExecutorService executor = Executors.newFixedThreadPool(16);
         File[] topics = fileSystemService.findAllTopics();
-        List<Future<TimeStamp>> list = new ArrayList<>(topics.length);
+        List<TimeStampTask> list = new ArrayList<>(topics.length);
 
         for (final File topic : topics) {
-            Future<TimeStamp> future = executor.submit(new Callable<TimeStamp>() {
-                @Override
-                public TimeStamp call() throws Exception {
-                    String topicStr = topic.getName();
-                    return new TimeStamp(topicStr, fileSystemDao.findLastRun(topicStr));
-                }
-            });
-            list.add(future);
+            list.add(new TimeStampTask(topic));
         }
-        for (Future<TimeStamp> fut : list) {
-            try {
+
+        LOG.info("Going to index: base_dir");
+        try {
+            for (Future<TimeStamp> fut : executor.invokeAll(list)) {
                 TimeStamp timeStamp = fut.get();
                 topicCacheDao.addTimeStamp(timeStamp);
-            } catch (InterruptedException | ExecutionException e) {
-                throw new ApplicationRuntimeException("An exception", e);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ApplicationRuntimeException("exception during indexing", e);
+        } catch (ExecutionException e) {
+            throw new ApplicationRuntimeException("exception during indexing", e);
+        } finally {
+            LOG.info("Indexing has finished");
+            executor.shutdown();
         }
-        executor.shutdown();
+    }
 
-        LOG.info("Indexing has finished");
+    private class TimeStampTask implements Callable<TimeStamp> {
+        private final File topic;
+
+        private TimeStampTask(File topic) {
+            this.topic = topic;
+        }
+
+        public TimeStamp call() throws Exception {
+            String topicStr = topic.getName();
+            return new TimeStamp(topicStr, fileSystemDao.findLastRun(topicStr));
+        }
     }
 }
