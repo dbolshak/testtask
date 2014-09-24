@@ -5,7 +5,7 @@ package com.dbolshak.testtask.dao.cache;
  */
 interface Indexer {
     /**
-     * Start indexing and other necessary service when application is ready
+     * Start indexing when application is ready
      */
     void index();
 }

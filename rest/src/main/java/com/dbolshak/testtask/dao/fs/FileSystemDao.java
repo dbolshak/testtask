@@ -38,7 +38,7 @@ class FileSystemDao implements TopicDao {
 
     @Override
     public String findLastRun(String topic) {
-        File history = new File(baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
+        File history = new File(getFullTopicPath(topic) + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
         final String[] lastRun = new String[]{""};
         history.listFiles(new FilenameFilter() {
             @Override
@@ -59,6 +59,10 @@ class FileSystemDao implements TopicDao {
 
     @Override
     public boolean topicExists(String topic) {
-        return findAllTopics().contains(topic);
+        return new File(getFullTopicPath(topic)).exists();
+    }
+
+    private String getFullTopicPath(String topic) {
+        return baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic;
     }
 }
