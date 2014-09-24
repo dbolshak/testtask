@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Use this annotation on bean's methods which must be called after setting a base_dir
+ * Use this annotation on bean's methods which must be called after setting a base_dir.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface PostSetDir {
-    boolean useCache() default true;
+    boolean usedByCache() default true;
 }

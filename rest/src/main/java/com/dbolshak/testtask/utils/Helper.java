@@ -1,6 +1,8 @@
 package com.dbolshak.testtask.utils;
 
 import com.dbolshak.testtask.model.TimeStamp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.regex.Pattern;
 
@@ -21,6 +23,7 @@ public final class Helper {
     private static final int TIMESTAMP_SEGMENT_INDEX = 2;
     private static final int HISTORY_SUB_FOLDER_SEGMENT_INDEX = 3;
     private static final int TOPIC_SEGMENT_INDEX = 4;
+    private static final Logger LOG = LoggerFactory.getLogger(Helper.class);
 
 
     private Helper() {
@@ -47,6 +50,11 @@ public final class Helper {
             return new TimeStamp(paths[paths.length - TOPIC_SEGMENT_INDEX], paths[paths.length - TIMESTAMP_SEGMENT_INDEX]);
         }
         return null;
+    }
+
+    public static boolean useCache() {
+        LOG.info("useCache is returning " + System.getProperty("useCache"));
+        return Boolean.valueOf(System.getProperty("useCache"));
     }
 
     private static String[] splitFilePath(String fileName) {

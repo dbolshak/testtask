@@ -2,6 +2,7 @@ package com.dbolshak.testtask;
 
 import com.dbolshak.testtask.annotation.PostSetDir;
 import com.dbolshak.testtask.exceptions.ApplicationRuntimeException;
+import com.dbolshak.testtask.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
@@ -47,7 +48,9 @@ public class ApplicationRunner implements CommandLineRunner {
         PostSetDir postSetDirAnnotation = method.getAnnotation(PostSetDir.class);
         if (postSetDirAnnotation != null) {
             try {
-                if (postSetDirAnnotation.useCache()) {
+                if (!postSetDirAnnotation.usedByCache()) {
+                    method.invoke(bean);
+                } else if (Helper.useCache()) {
                     method.invoke(bean);
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {

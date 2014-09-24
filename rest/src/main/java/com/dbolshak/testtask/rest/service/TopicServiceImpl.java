@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Service
 public class TopicServiceImpl implements TopicService {
     @Autowired
-    @Qualifier("topicCacheDao")
     private TopicDao topicDao;
 
     public ExistingTopicsDto getAllExistingTopics() {
