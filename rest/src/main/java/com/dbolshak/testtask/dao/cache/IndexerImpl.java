@@ -19,7 +19,7 @@ import java.util.concurrent.*;
 /*class has `public` access in order to call @PostSetDir by reflection*/
 public class IndexerImpl implements Indexer {
     private static final Logger LOG = LoggerFactory.getLogger(IndexerImpl.class);
-    private ExecutorService executor = Executors.newFixedThreadPool(8);
+    private final ExecutorService executor = Executors.newFixedThreadPool(8);
 
     @Autowired
     private TopicCacheDao topicCacheDao;

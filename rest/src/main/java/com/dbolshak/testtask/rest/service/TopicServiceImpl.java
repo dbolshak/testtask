@@ -8,7 +8,6 @@ import com.dbolshak.testtask.rest.dto.LastRunDetailsDto;
 import com.dbolshak.testtask.rest.dto.LastRunDto;
 import com.dbolshak.testtask.rest.dto.LastRunStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
