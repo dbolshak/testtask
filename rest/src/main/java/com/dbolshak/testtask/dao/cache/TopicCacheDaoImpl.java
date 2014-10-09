@@ -27,25 +27,19 @@ class TopicCacheDaoImpl implements TopicCacheDao {
 
     @Override
     public void removeTimeStamp(TimeStamp timeStamp) {
-        ConcurrentSkipListSet<String> timeStamps = storage.get(timeStamp.getTopic());
-        if (timeStamps != null && !timeStamps.isEmpty()) {
-            timeStamps.remove(timeStamp.getRun());
+        if (topicExists(timeStamp.getTopic())) {
+            storage.get(timeStamp.getTopic()).remove(timeStamp.getRun());
         }
     }
 
     @Override
     public void addTimeStamp(TimeStamp timeStamp) {
-        ConcurrentSkipListSet<String> timeStamps = findOrCreate(timeStamp.getTopic());
-        timeStamps.add(timeStamp.getRun());
+        findOrCreateTimeStampsForTopic(timeStamp.getTopic()).add(timeStamp.getRun());
     }
 
     @Override
     public String findLastRun(String topic) {
-        ConcurrentSkipListSet<String> timeStamps = storage.get(topic);
-        if (timeStamps != null && !timeStamps.isEmpty()) {
-            return timeStamps.last();
-        }
-        return "";
+        return topicExists(topic) ? storage.get(topic).last() : "";
     }
 
     @Override
@@ -59,7 +53,7 @@ class TopicCacheDaoImpl implements TopicCacheDao {
         return timeStamps != null && !timeStamps.isEmpty();
     }
 
-    private ConcurrentSkipListSet<String> findOrCreate(String topic) {
+    private ConcurrentSkipListSet<String> findOrCreateTimeStampsForTopic(String topic) {
         storage.putIfAbsent(topic, new ConcurrentSkipListSet<String>());
         return storage.get(topic);
     }

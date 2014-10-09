@@ -17,17 +17,19 @@ import java.util.Arrays;
 @Component("fileReader")
 class CsvComputable implements Computable {
     private static final Logger LOG = LoggerFactory.getLogger(CsvComputable.class);
+    private static int PARTITION_INDEX = 0;
+    private static int MESSAGE_COUNT_INDEX_INDEX = 1;
     @Autowired
     private FileSystemService fileSystemService;
 
     @Override
     public TimeStampContent compute(final TimeStamp timeStamp) {
-        try (CSVReader reader = new CSVReader(new FileReader(fileSystemService.getAbsoluteFileName(timeStamp)))) {
+        try (CSVReader offsetCsvReader = new CSVReader(new FileReader(fileSystemService.getAbsoluteFileName(timeStamp)))) {
             TimeStampContent timeStampContent = new TimeStampContent();
             String[] nextLine;
-            while ((nextLine = reader.readNext()) != null) {
+            while ((nextLine = offsetCsvReader.readNext()) != null) {
                 try {
-                    timeStampContent.put(Integer.valueOf(nextLine[0]), Long.valueOf(nextLine[1]));
+                    timeStampContent.put(Integer.valueOf(nextLine[PARTITION_INDEX]), Long.valueOf(nextLine[MESSAGE_COUNT_INDEX_INDEX]));
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
                     LOG.warn("some problem with " + Arrays.toString(nextLine) + " in file " + timeStamp, e);
                 }

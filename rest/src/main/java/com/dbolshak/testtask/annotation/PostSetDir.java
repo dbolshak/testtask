@@ -11,5 +11,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface PostSetDir {
-    boolean usedByCache() default true;
+    /**
+     * Almost methods marked by PostSetDir is used only to serve classes which are need for cache implementation of TopicDao.
+     *
+     * @return true (as a default) when annotated method is used only by cache.
+     */
+    boolean usedByCacheDao() default true;
 }

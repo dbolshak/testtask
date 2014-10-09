@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /*class has `public` access in order to call @PostSetDir by reflection*/
 public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileListener {
     private static final Logger LOG = LoggerFactory.getLogger(TopicChangingNotifierImpl.class);
-    private final Collection<TopicChangingListener> listeners = new CopyOnWriteArrayList<>();
+    private final Collection<TopicChangingListener> listenersOfTopicChangesOnFileSystem = new CopyOnWriteArrayList<>();
     @Autowired
     private BaseDirProvider baseDirProvider;
 
@@ -44,7 +44,7 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
                     fm.start();
                     LOG.info("Setting VFS listener finished");
                 } catch (FileSystemException e) {
-                    LOG.warn("file system listeners won't get any events, because VFS service did not started properly", e);
+                    LOG.warn("file system listenersOfTopicChangesOnFileSystem won't get any events, because VFS service did not started properly", e);
                 }
             }
         }).start();
@@ -52,12 +52,12 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
 
     @Override
     public void addListener(TopicChangingListener topicChangingListener) {
-        listeners.add(topicChangingListener);
+        listenersOfTopicChangesOnFileSystem.add(topicChangingListener);
     }
 
     @Override
     public void removeListener(TopicChangingListener topicChangingListener) {
-        listeners.remove(topicChangingListener);
+        listenersOfTopicChangesOnFileSystem.remove(topicChangingListener);
     }
 
     @Override
@@ -104,10 +104,10 @@ public class TopicChangingNotifierImpl implements TopicChangingNotifier, FileLis
     }
 
     private void handleFileSystemEvent(FileChangeEvent fileChangeEvent, FileActionHandlerCallback fileActionHandlerCallback) {
-        TimeStamp timeStamp  = createTimeStampFromFileChangeEvent(fileChangeEvent);
-        if (timeStamp != null) {
-            for (TopicChangingListener listener : listeners) {
-                fileActionHandlerCallback.fileActionHandle(listener, timeStamp);
+        TimeStamp timeStampFromFileChangeEvent = createTimeStampFromFileChangeEvent(fileChangeEvent);
+        if (timeStampFromFileChangeEvent != null) {
+            for (TopicChangingListener listener : listenersOfTopicChangesOnFileSystem) {
+                fileActionHandlerCallback.fileActionHandle(listener, timeStampFromFileChangeEvent);
             }
         }
     }

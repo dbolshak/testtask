@@ -48,7 +48,7 @@ public class ApplicationRunner implements CommandLineRunner {
         PostSetDir postSetDirAnnotation = method.getAnnotation(PostSetDir.class);
         if (postSetDirAnnotation != null) {
             try {
-                if (!postSetDirAnnotation.usedByCache()) {
+                if (!postSetDirAnnotation.usedByCacheDao()) {
                     method.invoke(bean);
                 } else if (Helper.useCache()) {
                     method.invoke(bean);
