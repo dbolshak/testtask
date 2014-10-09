@@ -1,5 +1,6 @@
 package com.dbolshak.testtask;
 
+import com.dbolshak.testtask.model.PartitionInfo;
 import com.dbolshak.testtask.model.TimeStamp;
 import com.dbolshak.testtask.model.TimeStampContent;
 
@@ -18,8 +19,8 @@ final public class Fixture {
     public static final TimeStampContent TIME_STAMP_CONTENT = new TimeStampContent();
 
     static {
-        TIME_STAMP_CONTENT.put(1, 1l);
-        TIME_STAMP_CONTENT.put(2, 3l);
+        TIME_STAMP_CONTENT.put(new PartitionInfo(new String[]{"1", "1"}));
+        TIME_STAMP_CONTENT.put(new PartitionInfo(new String[]{"2", "3"}));
     }
 
     private Fixture() {

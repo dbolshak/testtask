@@ -15,7 +15,7 @@ public class TimeStampContent {
         return unmodifiedCopy;
     }
 
-    public void put(Integer partition, Long messageCount) {
-        partitionToMessageCount.put(partition, messageCount);
+    public void put(PartitionInfo partitionInfo) {
+        partitionToMessageCount.put(partitionInfo.getPartition(), partitionInfo.getMessageCount());
     }
 }
