@@ -12,8 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
-
 @Service("fileSystemService")
 class FileSystemServiceImpl implements FileSystemService {
     @Autowired
@@ -26,11 +24,10 @@ class FileSystemServiceImpl implements FileSystemService {
 
     @Override
     public File[] findAllTopics() {
-        File root = new File(baseDirProvider.getBaseDir());
-        return root.listFiles(new FilenameFilter() {
+        return new File(baseDirProvider.getBaseDir()).listFiles(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String name) {
-                Path pattern = Paths.get(dir.getAbsolutePath() + FILE_SEPARATOR + name + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
+            public boolean accept(File baseDir, String topic) {
+                Path pattern = Paths.get(Helper.getHistorySubFolder(baseDir.getAbsolutePath(), topic));
                 return Files.exists(pattern) || Files.isDirectory(pattern);
             }
         });

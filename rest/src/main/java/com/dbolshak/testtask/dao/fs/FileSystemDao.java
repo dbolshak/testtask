@@ -15,8 +15,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.dbolshak.testtask.utils.Helper.FILE_SEPARATOR;
-
 @Service
 class FileSystemDao implements TopicDao {
     @Autowired
@@ -38,7 +36,7 @@ class FileSystemDao implements TopicDao {
 
     @Override
     public String findLastRun(String topic) {
-        File history = new File(getFullTopicPath(topic) + FILE_SEPARATOR + Helper.HISTORY_SUB_FOLDER);
+        File history = new File(Helper.getHistorySubFolder(baseDirProvider.getBaseDir(), topic));
         final String[] lastRun = new String[]{""};
         history.listFiles(new FilenameFilter() {
             @Override
@@ -59,10 +57,6 @@ class FileSystemDao implements TopicDao {
 
     @Override
     public boolean topicExists(String topic) {
-        return new File(getFullTopicPath(topic)).exists();
-    }
-
-    private String getFullTopicPath(String topic) {
-        return baseDirProvider.getBaseDir() + FILE_SEPARATOR + topic;
+        return new File(Helper.getTopicSubFolder(baseDirProvider.getBaseDir(), topic)).exists();
     }
 }
