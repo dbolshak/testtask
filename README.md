@@ -23,3 +23,4 @@ localhost:8080/topic
 localhost:8080/topic/topic-1
 localhost:8080/topic/topic-1/lastRun
 localhost:8080/topic/topic-1/lastRun/stats
+
